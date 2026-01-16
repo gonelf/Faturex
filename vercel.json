@@ -1,17 +1,6 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "api/index.ts",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/api/index.ts"
-    }
-  ],
+  "buildCommand": "next build",
+  "framework": "nextjs",
   "env": {
     "NODE_ENV": "production"
   }
