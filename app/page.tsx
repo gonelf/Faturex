@@ -35,7 +35,7 @@ export default function Home() {
           <h2 className="text-5xl md:text-6xl font-bold mb-6">
             <span className="text-blue-600">Quanto lhe custa</span>
             <br />
-            <Typewriter words={['a barbearia', 'o salão', 'o spa', 'o ginásio', 'a clínica']} delay={2000} />
+            <Typewriter words={['a barbearia', 'o salão', 'o spa']} delay={2000} />
             <span className="text-purple-600"> num mês mau?</span>
           </h2>
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
