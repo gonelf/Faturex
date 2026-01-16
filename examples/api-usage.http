@@ -1,0 +1,162 @@
+###
+# Portuguese Billing System - API Usage Examples
+# Use with REST Client extension in VS Code or similar tools
+###
+
+### Variables
+@baseUrl = http://localhost:3000
+@authToken = YOUR_SUPABASE_JWT_TOKEN_HERE
+@seriesId = YOUR_SERIES_UUID_HERE
+@customerId = YOUR_CUSTOMER_UUID_HERE
+@productId = YOUR_PRODUCT_UUID_HERE
+@taxId = YOUR_TAX_UUID_HERE
+@invoiceId = INVOICE_UUID_AFTER_CREATION
+
+### Health Check
+GET {{baseUrl}}/health
+
+###
+# Create a new invoice (draft)
+# Status will be 'N' (Normal/Draft)
+POST {{baseUrl}}/api/invoices
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "seriesId": "{{seriesId}}",
+  "customerId": "{{customerId}}",
+  "invoiceDate": "2026-01-16",
+  "sourceId": "user123",
+  "lines": [
+    {
+      "productId": "{{productId}}",
+      "quantity": 2,
+      "unitPrice": 50.00,
+      "description": "Professional Services - Consulting",
+      "taxId": "{{taxId}}"
+    },
+    {
+      "productId": "{{productId}}",
+      "quantity": 1,
+      "unitPrice": 100.00,
+      "description": "Software License",
+      "taxId": "{{taxId}}"
+    }
+  ]
+}
+
+###
+# Finalize an invoice
+# Changes status to 'F' (Finalized)
+# Document becomes IMMUTABLE after this operation
+POST {{baseUrl}}/api/invoices/{{invoiceId}}/finalize
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "sourceId": "user123"
+}
+
+###
+# Cancel an invoice (only if not finalized)
+# Changes status to 'A' (Cancelled)
+POST {{baseUrl}}/api/invoices/{{invoiceId}}/cancel
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "sourceId": "user123",
+  "reason": "Customer requested cancellation due to incorrect data"
+}
+
+###
+# Example: Create invoice with multiple tax rates
+POST {{baseUrl}}/api/invoices
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "seriesId": "{{seriesId}}",
+  "customerId": "{{customerId}}",
+  "invoiceDate": "2026-01-16",
+  "sourceId": "user123",
+  "lines": [
+    {
+      "productId": "product-1-uuid",
+      "quantity": 1,
+      "unitPrice": 100.00,
+      "description": "Product with 23% IVA",
+      "taxId": "tax-23-uuid"
+    },
+    {
+      "productId": "product-2-uuid",
+      "quantity": 2,
+      "unitPrice": 25.00,
+      "description": "Product with 13% IVA",
+      "taxId": "tax-13-uuid"
+    },
+    {
+      "productId": "product-3-uuid",
+      "quantity": 1,
+      "unitPrice": 50.00,
+      "description": "Product with 6% IVA",
+      "taxId": "tax-6-uuid"
+    }
+  ]
+}
+
+###
+# Expected Response Structure for Invoice Creation
+# {
+#   "success": true,
+#   "data": {
+#     "id": "invoice-uuid",
+#     "seriesId": "series-uuid",
+#     "invoiceNo": "FT 2026/1",
+#     "documentNumber": 1,
+#     "atcud": "CSVP8Y9-1",
+#     "documentHash": "Base64EncodedRSASignature...",
+#     "hashControl": "A1B2",
+#     "documentStatus": "N",
+#     "invoiceDate": "2026-01-16",
+#     "systemEntryDate": "2026-01-16T10:30:00.000Z",
+#     "customerId": "customer-uuid",
+#     "taxPayable": 46.00,
+#     "netTotal": 200.00,
+#     "grossTotal": 246.00,
+#     "qrCodeData": "A:123456789*B:987654321*C:PT*D:FT*E:N*F:20260116*G:FT 2026/1*H:CSVP8Y9-1*I1:PT-NOR-23.00*I2:200.00*I3:46.00*N:246.00*O:A1B2",
+#     "previousHash": null
+#   },
+#   "message": "Invoice created successfully"
+# }
+
+###
+# Notes:
+#
+# 1. Authentication:
+#    - All endpoints require Bearer token from Supabase Auth
+#    - Token should be included in Authorization header
+#
+# 2. Invoice Workflow:
+#    - Create (status: 'N' - Draft)
+#    - Finalize (status: 'F' - Immutable)
+#    - Cancel (status: 'A' - Only if not finalized)
+#
+# 3. ATCUD:
+#    - Automatically generated as: ValidationCode-DocumentNumber
+#    - Example: "CSVP8Y9-1"
+#
+# 4. Digital Signature:
+#    - RSA-SHA1 signature includes: Date, Entry Time, Number, Total, Previous Hash
+#    - Creates cryptographic chain
+#    - 4-character hash control for verification
+#
+# 5. QR Code:
+#    - Generated automatically with all required data
+#    - Compliant with Portaria n.º 195/2020
+#    - Ready to be encoded as QR code image
+#
+# 6. Immutability:
+#    - Finalized invoices CANNOT be modified or deleted
+#    - Database triggers enforce this constraint
+#    - Attempting to modify will return HTTP 400 error
