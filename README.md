@@ -43,9 +43,19 @@ This system implements all mandatory requirements for certification by the Portu
 
 ## Technology Stack
 
-- **Backend**: Node.js + TypeScript + Express
-- **Database**: PostgreSQL (via Supabase)
-- **Authentication**: Supabase Auth
+### Frontend
+- **Next.js 14**: React framework with App Router
+- **TypeScript**: Type-safe development
+- **Tailwind CSS**: Utility-first CSS framework
+- **React Hook Form**: Form validation and management
+- **Lucide React**: Icon library
+- **Supabase SSR**: Server-side rendering with Supabase
+
+### Backend
+- **Node.js + TypeScript**: Runtime and language
+- **Express**: Web framework
+- **PostgreSQL**: Database (via Supabase)
+- **Supabase Auth**: Authentication and authorization
 - **Cryptography**: Node.js crypto (RSA-SHA1)
 - **API**: RESTful JSON API
 
@@ -107,13 +117,66 @@ psql -h your-db-host -U postgres -d postgres -f database/schema.sql
 ### 6. Build and run
 
 ```bash
-# Development mode
+# Development mode (Next.js frontend + backend API)
 npm run dev
 
 # Production build
 npm run build
 npm start
+
+# Backend only (if needed)
+npm run backend:dev
+npm run backend:build
+npm run backend:start
 ```
+
+### 7. Access the application
+
+- Frontend: http://localhost:3000
+- Landing page with features overview
+- Registration and login pages
+- Dashboard after authentication
+
+## User Interface Features
+
+### Landing Page
+- Professional landing page with feature showcase
+- Compliance badges and legal information
+- Call-to-action for registration
+
+### Authentication
+- **User Registration**: Create account with email verification
+- **Login**: Secure login with session management
+- **Password Reset**: Reset forgotten passwords
+- **Protected Routes**: Automatic redirect for unauthenticated users
+
+### Dashboard
+- **Overview**: Total invoices, revenue, customers, and products
+- **Recent Invoices**: Quick view of latest documents
+- **Quick Actions**: Fast access to customer, product, and series management
+
+### Customer Management
+- **List View**: Search and filter customers
+- **Create/Edit**: Form with NIF validation
+- **Address Management**: Full billing address support
+
+### Product Management
+- **List View**: Search and filter products/services
+- **Create/Edit**: Product types (P, S, O, E, I)
+- **Pricing**: Unit price and tax configuration
+
+### Series Management
+- **List View**: All configured billing series
+- **Create**: New series with AT validation codes
+- **Tracking**: Current document numbers per series
+
+### Invoice Management
+- **List View**: Search and filter invoices by number or ATCUD
+- **Create**: Multi-line invoice creation with dynamic line items
+- **View Details**: Full invoice view with QR code data
+- **Finalize**: Convert draft to immutable finalized document
+- **Cancel**: Cancel draft invoices with reason tracking
+- **Status Indicators**: Visual badges for draft/finalized/cancelled states
 
 ## API Usage
 
