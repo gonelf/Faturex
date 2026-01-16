@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import { FileText, Shield, QrCode, Lock, CheckCircle, ArrowRight } from 'lucide-react'
+import { FileText, DollarSign, UserX, CreditCard, ArrowRight } from 'lucide-react'
+import Typewriter from '@/components/Typewriter'
 
 export default function Home() {
   return (
@@ -31,177 +32,166 @@ export default function Home() {
       {/* Hero Section */}
       <section className="container mx-auto px-4 py-20">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center space-x-2 bg-blue-100 text-blue-700 px-4 py-2 rounded-full mb-6">
-            <Shield className="h-4 w-4" />
-            <span className="text-sm font-medium">SAF-T (PT) 1.04 Compliant</span>
-          </div>
-          <h2 className="text-5xl font-bold text-gray-900 mb-6">
-            Sistema de Faturação Português
+          <h2 className="text-5xl md:text-6xl font-bold mb-6">
+            <span className="text-blue-600">Quanto lhe custa</span>
+            <br />
+            <Typewriter words={['a barbearia', 'o salão', 'o spa']} delay={2000} />
+            <span className="text-purple-600"> num mês mau?</span>
           </h2>
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            Solução profissional de faturação em conformidade com a legislação portuguesa.
-            ATCUD, assinatura digital, e código QR integrados.
+            O seu software atual cobra sempre a mensalidade. O Faturex não. Estamos do seu lado.
           </p>
           <div className="flex justify-center space-x-4">
             <Link
               href="/register"
-              className="bg-blue-600 text-white px-8 py-4 rounded-lg hover:bg-blue-700 transition text-lg font-medium inline-flex items-center"
+              className="bg-blue-600 text-white px-8 py-4 rounded-lg hover:bg-blue-700 transition text-lg font-medium inline-flex items-center shadow-lg hover:shadow-xl"
             >
-              Criar Conta Grátis
-              <ArrowRight className="ml-2 h-5 w-5" />
+              Comece grátis
             </Link>
             <Link
               href="/login"
-              className="border-2 border-gray-300 text-gray-700 px-8 py-4 rounded-lg hover:border-gray-400 transition text-lg font-medium"
+              className="text-gray-700 px-8 py-4 rounded-lg hover:text-gray-900 transition text-lg font-medium inline-flex items-center"
             >
-              Já tenho conta
+              Entrar <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Features Grid */}
+      {/* Estamos Juntos Section */}
       <section className="container mx-auto px-4 py-20">
-        <h3 className="text-3xl font-bold text-center text-gray-900 mb-12">
-          Funcionalidades Principais
+        <h3 className="text-4xl md:text-5xl font-bold text-center text-gray-900 mb-16">
+          Estamos Juntos
         </h3>
-        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          {/* Feature 1 */}
-          <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition">
-            <div className="bg-blue-100 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-              <Shield className="h-6 w-6 text-blue-600" />
+        <div className="grid md:grid-cols-1 gap-8 max-w-4xl mx-auto">
+          {/* Feature 1 - Zero Cost */}
+          <div className="bg-white p-10 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition">
+            <div className="flex justify-center mb-6">
+              <div className="bg-green-500 w-20 h-20 rounded-full flex items-center justify-center shadow-md">
+                <DollarSign className="h-10 w-10 text-white" />
+              </div>
             </div>
-            <h4 className="text-xl font-semibold text-gray-900 mb-3">
-              Assinatura Digital
+            <h4 className="text-2xl font-bold text-gray-900 mb-4 text-center">
+              Se a cadeira está vazia, o custo é zero.
             </h4>
-            <p className="text-gray-600">
-              Conformidade com Portaria n.º 363/2010. Assinaturas RSA-SHA1 e encadeamento de documentos.
+            <p className="text-gray-600 text-center text-lg">
+              Férias? Mês parado? No Faturex, se não houver transações, não há comissões. Só ganhamos quando o senhor fatura.
             </p>
           </div>
 
-          {/* Feature 2 */}
-          <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition">
-            <div className="bg-green-100 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-              <QrCode className="h-6 w-6 text-green-600" />
+          {/* Feature 2 - No Shows */}
+          <div className="bg-white p-10 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition">
+            <div className="flex justify-center mb-6">
+              <div className="bg-red-500 w-20 h-20 rounded-full flex items-center justify-center shadow-md">
+                <UserX className="h-10 w-10 text-white" />
+              </div>
             </div>
-            <h4 className="text-xl font-semibold text-gray-900 mb-3">
-              ATCUD & QR Code
+            <h4 className="text-2xl font-bold text-gray-900 mb-4 text-center">
+              Acabe com o prejuízo dos No-Shows.
             </h4>
-            <p className="text-gray-600">
-              Geração automática de ATCUD e código QR conforme Portaria n.º 195/2020.
+            <p className="text-gray-600 text-center text-lg">
+              O cliente não apareceu? Com o nosso sistema de marcação online, pode cobrar um sinal no agendamento. Se ele faltar, o seu tempo continua pago.
             </p>
           </div>
 
-          {/* Feature 3 */}
-          <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition">
-            <div className="bg-purple-100 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-              <CheckCircle className="h-6 w-6 text-purple-600" />
+          {/* Feature 3 - Bank Rents */}
+          <div className="bg-white p-10 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition">
+            <div className="flex justify-center mb-6">
+              <div className="bg-blue-500 w-20 h-20 rounded-full flex items-center justify-center shadow-md">
+                <CreditCard className="h-10 w-10 text-white" />
+              </div>
             </div>
-            <h4 className="text-xl font-semibold text-gray-900 mb-3">
-              Validação NIF
+            <h4 className="text-2xl font-bold text-gray-900 mb-4 text-center">
+              Adeus, Rendas do Banco.
             </h4>
-            <p className="text-gray-600">
-              Validação automática de NIF usando algoritmo Módulo 11 antes do armazenamento.
-            </p>
-          </div>
-
-          {/* Feature 4 */}
-          <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition">
-            <div className="bg-red-100 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-              <Lock className="h-6 w-6 text-red-600" />
-            </div>
-            <h4 className="text-xl font-semibold text-gray-900 mb-3">
-              Imutabilidade
-            </h4>
-            <p className="text-gray-600">
-              Documentos finalizados não podem ser alterados ou eliminados, garantindo integridade.
-            </p>
-          </div>
-
-          {/* Feature 5 */}
-          <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition">
-            <div className="bg-yellow-100 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-              <FileText className="h-6 w-6 text-yellow-600" />
-            </div>
-            <h4 className="text-xl font-semibold text-gray-900 mb-3">
-              Numeração Sequencial
-            </h4>
-            <p className="text-gray-600">
-              Sistema de séries independentes com numeração sequencial automática por série.
-            </p>
-          </div>
-
-          {/* Feature 6 */}
-          <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition">
-            <div className="bg-indigo-100 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-              <CheckCircle className="h-6 w-6 text-indigo-600" />
-            </div>
-            <h4 className="text-xl font-semibold text-gray-900 mb-3">
-              SAF-T (PT) 1.04
-            </h4>
-            <p className="text-gray-600">
-              Estrutura de base de dados totalmente conforme com especificação SAF-T (PT) 1.04.
+            <p className="text-gray-600 text-center text-lg">
+              Para quê pagar aluguer de um TPA e mensalidade de faturação todos os meses? O Faturex substitui tudo isso por uma taxa única e justa por serviço.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Compliance Section */}
-      <section className="bg-gray-50 py-20">
+      {/* Risk Simulator Section */}
+      <section className="bg-gray-900 py-20">
         <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center">
-            <h3 className="text-3xl font-bold text-gray-900 mb-6">
-              Legislação e Conformidade
+          <div className="max-w-3xl mx-auto">
+            <h3 className="text-3xl font-bold text-green-400 text-center mb-6">
+              Simulador de Risco
             </h3>
-            <p className="text-gray-600 mb-8">
-              O Faturex está em conformidade com toda a legislação portuguesa aplicável:
+            <p className="text-gray-300 text-center text-lg mb-8">
+              Arraste para ver o que acontece num mês mau:
             </p>
-            <div className="grid md:grid-cols-2 gap-4 text-left">
-              <div className="bg-white p-4 rounded-lg border border-gray-200">
-                <h4 className="font-semibold text-gray-900 mb-2">Portaria n.º 363/2010</h4>
-                <p className="text-sm text-gray-600">Assinaturas Digitais</p>
+
+            {/* Slider */}
+            <div className="mb-8">
+              <input
+                type="range"
+                min="0"
+                max="100"
+                defaultValue="0"
+                className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
+              />
+            </div>
+
+            {/* Billing Display */}
+            <div className="text-center mb-10">
+              <p className="text-gray-400 text-lg mb-2">Faturação este mês:</p>
+              <p className="text-green-400 text-4xl font-bold">0€</p>
+            </div>
+
+            {/* Comparison Cards */}
+            <div className="space-y-6">
+              {/* Current System */}
+              <div className="bg-gray-800 border-2 border-red-500 rounded-2xl p-8">
+                <p className="text-red-400 text-sm font-semibold mb-3 uppercase">SISTEMA ATUAL</p>
+                <p className="text-white text-5xl font-bold mb-4">60.00€</p>
+                <p className="text-gray-400">
+                  O banco e o software cobram a mensalidade fixa, mesmo que não trabalhe.
+                </p>
               </div>
-              <div className="bg-white p-4 rounded-lg border border-gray-200">
-                <h4 className="font-semibold text-gray-900 mb-2">Portaria n.º 195/2020</h4>
-                <p className="text-sm text-gray-600">ATCUD & QR Codes</p>
-              </div>
-              <div className="bg-white p-4 rounded-lg border border-gray-200">
-                <h4 className="font-semibold text-gray-900 mb-2">SAF-T (PT) 1.04</h4>
-                <p className="text-sm text-gray-600">Standard Audit File</p>
-              </div>
-              <div className="bg-white p-4 rounded-lg border border-gray-200">
-                <h4 className="font-semibold text-gray-900 mb-2">Decreto-Lei n.º 28/2019</h4>
-                <p className="text-sm text-gray-600">Comunicação de documentos</p>
+
+              {/* Faturex */}
+              <div className="bg-gray-800 border-2 border-green-500 rounded-2xl p-8">
+                <p className="text-green-400 text-sm font-semibold mb-3 uppercase">FATUREX</p>
+                <p className="text-white text-5xl font-bold mb-4">0.00€</p>
+                <p className="text-gray-400">
+                  Se não fatura, não paga. O Faturex assume o risco consigo.
+                </p>
               </div>
             </div>
+
+            {/* Note */}
+            <p className="text-gray-500 text-sm text-center mt-8">
+              *Nota: Taxa de disponibilidade de 20€ apenas aplicada para manter o sistema ativo se houver faturação mínima registada.
+            </p>
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
       <section className="container mx-auto px-4 py-20">
-        <div className="max-w-4xl mx-auto bg-blue-600 rounded-2xl p-12 text-center text-white">
-          <h3 className="text-3xl font-bold mb-4">
-            Comece a Faturar Hoje
+        <div className="max-w-4xl mx-auto bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl p-12 text-center text-white shadow-2xl">
+          <h3 className="text-4xl font-bold mb-4">
+            Junte-se ao Faturex
           </h3>
           <p className="text-xl text-blue-100 mb-8">
-            Crie a sua conta gratuitamente e emita a sua primeira fatura em minutos.
+            Pare de pagar por meses maus. Comece hoje e pague apenas quando fatura.
           </p>
           <Link
             href="/register"
-            className="bg-white text-blue-600 px-8 py-4 rounded-lg hover:bg-blue-50 transition text-lg font-medium inline-flex items-center"
+            className="bg-white text-blue-600 px-10 py-5 rounded-xl hover:bg-blue-50 transition text-lg font-bold inline-flex items-center shadow-lg"
           >
-            Criar Conta Grátis
+            Comece grátis
             <ArrowRight className="ml-2 h-5 w-5" />
           </Link>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="border-t bg-gray-50 py-8">
+      <footer className="border-t bg-white py-8">
         <div className="container mx-auto px-4 text-center text-gray-600">
           <p>&copy; 2026 Faturex. Todos os direitos reservados.</p>
-          <p className="text-sm mt-2">Sistema de Faturação Português - SAF-T (PT) 1.04 Compliant</p>
+          <p className="text-sm mt-2">Estamos do seu lado.</p>
         </div>
       </footer>
     </div>
