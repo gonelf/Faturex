@@ -271,6 +271,122 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Seasonality Reality Section */}
+      <section className="container mx-auto px-4 py-20 bg-gradient-to-br from-gray-900 to-gray-800">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12">
+            <h3 className="text-4xl md:text-5xl font-bold text-white mb-6">
+              Não olhe apenas para o mês de Dezembro. Olhe para o seu ano inteiro.
+            </h3>
+            <p className="text-xl text-gray-300 mb-8">
+              A realidade de um salão, barbearia ou spa: <span className="text-yellow-400 font-bold">4 a 5 meses difíceis por ano</span>
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6 mb-12">
+            {/* Good Months */}
+            <div className="bg-green-500/10 border-2 border-green-500 rounded-2xl p-8">
+              <h4 className="text-2xl font-bold text-green-400 mb-4 flex items-center">
+                <span className="text-3xl mr-3">📈</span> 8 Meses Bons
+              </h4>
+              <ul className="text-gray-300 space-y-2">
+                <li>✓ Março a Julho: Época alta</li>
+                <li>✓ Setembro e Outubro: Regresso</li>
+                <li>✓ Dezembro: Pico festivo</li>
+              </ul>
+              <p className="text-green-400 font-bold mt-4">
+                Faturação normal ou acima da média
+              </p>
+            </div>
+
+            {/* Weak Months */}
+            <div className="bg-red-500/10 border-2 border-red-500 rounded-2xl p-8">
+              <h4 className="text-2xl font-bold text-red-400 mb-4 flex items-center">
+                <span className="text-3xl mr-3">📉</span> 4 Meses Fracos
+              </h4>
+              <ul className="text-gray-300 space-y-2">
+                <li>⚠️ Janeiro/Fevereiro: Ressaca do Natal</li>
+                <li>⚠️ Agosto: Férias (salão pode fechar)</li>
+                <li>⚠️ Novembro: Abrandamento pré-Natal</li>
+                <li>⚠️ Imprevistos: Doença, obras, etc.</li>
+              </ul>
+              <p className="text-red-400 font-bold mt-4">
+                Faturação cai 60-70% ou vai a ZERO
+              </p>
+            </div>
+          </div>
+
+          <div className="bg-blue-500/10 border-2 border-blue-500 rounded-2xl p-8 text-center">
+            <p className="text-2xl text-white font-bold mb-4">
+              💡 O Argumento Decisivo
+            </p>
+            <p className="text-xl text-gray-300 leading-relaxed">
+              Nos meses de pico, o custo variável acompanha o seu sucesso. Mas nos <span className="text-yellow-400 font-bold">4 meses de baixa faturação</span>, o Faturex poupa-lhe <span className="text-green-400 font-bold">centenas de euros</span> em rendas que os outros sistemas cobram sem piedade. No final do ano, <span className="text-white font-bold">o lucro que mantém no bolso é maior</span> porque o Faturex absorve o risco consigo nos momentos parados.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Annual Comparison Table Section */}
+      <section className="container mx-auto px-4 py-20 bg-gray-950">
+        <div className="max-w-5xl mx-auto">
+          <h3 className="text-4xl md:text-5xl font-bold text-center text-white mb-6">
+            Comparação de Cenário Anual
+          </h3>
+          <p className="text-xl text-gray-400 text-center mb-12">
+            A realidade completa: 8 meses normais + 4 meses de baixa
+          </p>
+
+          <div className="overflow-x-auto">
+            <table className="w-full bg-gray-900 rounded-2xl shadow-xl overflow-hidden border border-gray-800">
+              <thead className="bg-gradient-to-r from-purple-600 to-blue-600 text-white">
+                <tr>
+                  <th className="px-6 py-4 text-left text-lg font-bold">Cenário Anual</th>
+                  <th className="px-6 py-4 text-left text-lg font-bold">Sistema Tradicional</th>
+                  <th className="px-6 py-4 text-left text-lg font-bold">Faturex</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-800">
+                <tr className="hover:bg-gray-800/50 transition">
+                  <td className="px-6 py-4 font-medium text-gray-200">8 Meses Bons</td>
+                  <td className="px-6 py-4 text-gray-400">Pagas Rendas (480€) + Taxas</td>
+                  <td className="px-6 py-4 font-bold text-green-400">Pagas conforme o lucro</td>
+                </tr>
+                <tr className="hover:bg-gray-800/50 transition">
+                  <td className="px-6 py-4 font-medium text-gray-200">4 Meses Fracos/Férias</td>
+                  <td className="px-6 py-4 text-red-400 font-bold">Pagas 240€ de rendas fixas</td>
+                  <td className="px-6 py-4 font-bold text-green-400">Pagas quase 0€</td>
+                </tr>
+                <tr className="hover:bg-gray-800/50 transition">
+                  <td className="px-6 py-4 font-medium text-gray-200">Risco de Prejuízo</td>
+                  <td className="px-6 py-4 text-gray-400">Elevado (Custo fixo sufoca)</td>
+                  <td className="px-6 py-4 font-bold text-green-400">Zero (Custo adapta-se)</td>
+                </tr>
+                <tr className="hover:bg-gray-800/50 transition">
+                  <td className="px-6 py-4 font-medium text-gray-200">Equipamento (TPA)</td>
+                  <td className="px-6 py-4 text-gray-400">Alugado (Nunca é teu)</td>
+                  <td className="px-6 py-4 font-bold text-green-400">Teu (79€ uma vez)</td>
+                </tr>
+                <tr className="bg-green-500/10 hover:bg-green-500/20 transition">
+                  <td className="px-6 py-4 font-bold text-white text-lg">Poupança nos 4 meses fracos</td>
+                  <td className="px-6 py-4 text-red-400 font-bold text-xl">0€ poupados</td>
+                  <td className="px-6 py-4 text-green-400 font-bold text-xl">~240€ poupados</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div className="mt-8 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border-2 border-yellow-500/30 p-8 rounded-2xl">
+            <p className="text-center text-xl text-white font-bold mb-2">
+              ⚡ A Vantagem Real do Faturex
+            </p>
+            <p className="text-center text-gray-300 text-lg">
+              Mesmo que pague mais em meses de pico, <span className="text-yellow-400 font-bold">recupera tudo e mais nos meses fracos</span>. Resultado: Mais dinheiro no bolso ao fim do ano, sem stress em Janeiro ou Agosto.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Risk Simulator Section */}
       <section className="bg-gray-900 py-20">
         <div className="container mx-auto px-4">
@@ -361,6 +477,41 @@ export default function Home() {
               <p className="text-gray-600 text-lg">
                 Sim! O sistema de agendamento online Agendex está 100% incluído sem qualquer custo adicional. Os seus clientes podem marcar 24/7, recebe confirmações automáticas e lembretes inteligentes. Tudo isto a 0€ por mês.
               </p>
+            </div>
+
+            {/* FAQ 6 - High Revenue Objection Handler */}
+            <div className="bg-gradient-to-r from-yellow-50 to-orange-50 p-8 rounded-2xl shadow-lg border-2 border-orange-200">
+              <h4 className="text-2xl font-bold text-gray-900 mb-4">
+                ❓ Mas se eu faturar 10.000€ num mês, pago 600€ a vocês. No outro sistema pagava só 60€!
+              </h4>
+              <div className="text-gray-700 text-lg space-y-4">
+                <p>
+                  <span className="font-bold text-orange-600">Essa é a pergunta certa!</span> Mas vamos ver os números reais:
+                </p>
+                <div className="bg-white p-6 rounded-xl border border-orange-200">
+                  <p className="font-bold text-gray-900 mb-3">Sistema Tradicional (10.000€ faturados):</p>
+                  <ul className="space-y-2 text-gray-700">
+                    <li>• 60€ de rendas fixas (TPA + Software + Marcações)</li>
+                    <li>• + <span className="font-bold text-red-600">250€</span> em taxas de cartão (2.5%)</li>
+                    <li>• = <span className="font-bold text-red-600">310€ total</span> (não incluindo custos escondidos)</li>
+                  </ul>
+                </div>
+                <div className="bg-green-50 p-6 rounded-xl border border-green-200">
+                  <p className="font-bold text-gray-900 mb-3">Faturex (10.000€ faturados):</p>
+                  <ul className="space-y-2 text-gray-700">
+                    <li>• <span className="font-bold text-green-600">600€ tudo incluído</span></li>
+                    <li>• Taxas de cartão já incluídas</li>
+                    <li>• Software de faturação incluído</li>
+                    <li>• Sistema de marcações incluído</li>
+                  </ul>
+                </div>
+                <p className="font-bold text-lg text-gray-900 bg-yellow-100 p-4 rounded-lg border-l-4 border-yellow-500">
+                  💡 <strong>A grande diferença:</strong> Se no mês seguinte quiseres ir de férias e faturares 0€, no Faturex pagas <span className="text-green-600">0€</span>. No sistema tradicional? A fatura de 60€ chega à mesma. Ao longo do ano, <span className="text-orange-600">o Faturex compensa sempre</span> nos meses fracos.
+                </p>
+                <p className="text-gray-600 italic">
+                  Resultado: Sim, pagas mais em meses excepcionais, mas o custo real anual é menor porque não pagas nada nos meses de paragem. É isso que faz a diferença no teu bolso ao fim do ano.
+                </p>
+              </div>
             </div>
           </div>
         </div>
