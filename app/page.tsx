@@ -1,6 +1,7 @@
 import Link from 'next/link'
-import { FileText, DollarSign, UserX, CreditCard, ArrowRight } from 'lucide-react'
+import { FileText, DollarSign, UserX, CreditCard, ArrowRight, Calendar } from 'lucide-react'
 import Typewriter from '@/components/Typewriter'
+import RiskSimulator from '@/components/RiskSimulator'
 
 export default function Home() {
   return (
@@ -23,7 +24,7 @@ export default function Home() {
               href="/register"
               className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition"
             >
-              Começar Grátis
+              Risco Zero
             </Link>
           </nav>
         </div>
@@ -33,20 +34,19 @@ export default function Home() {
       <section className="container mx-auto px-4 py-20">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-5xl md:text-6xl font-bold mb-6">
-            <span className="text-blue-600">Quanto lhe custa</span>
+            <span className="text-blue-600">O único software que só fatura</span>
             <br />
-            <Typewriter words={['a barbearia', 'o salão', 'o spa']} delay={2000} />
-            <span className="text-purple-600"> num mês mau?</span>
+            <span className="text-purple-600">quando tu faturas. Ponto final.</span>
           </h2>
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            O seu software atual cobra sempre a mensalidade. O Faturex não. Estamos do seu lado.
+            Sem mensalidades. Sem rendas fixas. Sem taxas de manutenção. Pagas apenas 8% por cada serviço cobrado. Se não trabalhares, o teu custo é zero absoluto.
           </p>
           <div className="flex justify-center space-x-4">
             <Link
               href="/register"
               className="bg-blue-600 text-white px-8 py-4 rounded-lg hover:bg-blue-700 transition text-lg font-medium inline-flex items-center shadow-lg hover:shadow-xl"
             >
-              Comece grátis
+              Começar agora com Risco Zero
             </Link>
             <Link
               href="/login"
@@ -72,10 +72,10 @@ export default function Home() {
               </div>
             </div>
             <h4 className="text-2xl font-bold text-gray-900 mb-4 text-center">
-              Se a cadeira está vazia, o custo é zero.
+              Se a cadeira não roda, o Faturex não cobra.
             </h4>
             <p className="text-gray-600 text-center text-lg">
-              Férias? Mês parado? No Faturex, se não houver transações, não há comissões. Só ganhamos quando o senhor fatura.
+              Ideal para barbeiros, cabeleireiros e spas que querem previsibilidade total de custos. Férias? Mês parado? No Faturex, se não houver transações, não há comissões. Só ganhamos quando tu faturas.
             </p>
           </div>
 
@@ -111,60 +111,58 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Agendex Section */}
+      <section className="container mx-auto px-4 py-20 bg-gradient-to-r from-purple-50 to-blue-50">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12">
+            <div className="inline-block bg-purple-600 text-white px-6 py-2 rounded-full text-sm font-bold mb-6">
+              AGENDAMENTO PROFISSIONAL INCLUÍDO
+            </div>
+            <h3 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+              A tua agenda agora trabalha para ti
+            </h3>
+            <p className="text-xl text-gray-600 mb-8">
+              Não pagues por um software de marcações à parte. Com o Faturex, o sistema de agendamento online Agendex é gratuito.
+            </p>
+          </div>
+
+          <div className="bg-white p-10 rounded-2xl shadow-2xl border border-gray-100">
+            <div className="flex justify-center mb-6">
+              <div className="bg-purple-600 w-20 h-20 rounded-full flex items-center justify-center shadow-md">
+                <Calendar className="h-10 w-10 text-white" />
+              </div>
+            </div>
+            <h4 className="text-2xl font-bold text-gray-900 mb-4 text-center">
+              Agendex: O teu sistema de marcações grátis
+            </h4>
+            <p className="text-gray-600 text-lg mb-6 text-center">
+              O Agendex (agora integrado no Faturex) permite que os teus clientes marquem cortes ou tratamentos diretamente pelo link na tua bio do Instagram. Recebe confirmações automáticas e reduz as faltas com lembretes inteligentes.
+            </p>
+            <div className="grid md:grid-cols-3 gap-6 mt-8">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-purple-600 mb-2">24/7</div>
+                <p className="text-gray-600">Marcações a qualquer hora</p>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-purple-600 mb-2">0€</div>
+                <p className="text-gray-600">Sem custos mensais</p>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-purple-600 mb-2">100%</div>
+                <p className="text-gray-600">Integrado com faturação</p>
+              </div>
+            </div>
+            <p className="text-center text-gray-500 text-sm mt-8">
+              Tudo isto sem pagar mais um cêntimo por mês.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Risk Simulator Section */}
       <section className="bg-gray-900 py-20">
         <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto">
-            <h3 className="text-3xl font-bold text-green-400 text-center mb-6">
-              Simulador de Risco
-            </h3>
-            <p className="text-gray-300 text-center text-lg mb-8">
-              Arraste para ver o que acontece num mês mau:
-            </p>
-
-            {/* Slider */}
-            <div className="mb-8">
-              <input
-                type="range"
-                min="0"
-                max="100"
-                defaultValue="0"
-                className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
-              />
-            </div>
-
-            {/* Billing Display */}
-            <div className="text-center mb-10">
-              <p className="text-gray-400 text-lg mb-2">Faturação este mês:</p>
-              <p className="text-green-400 text-4xl font-bold">0€</p>
-            </div>
-
-            {/* Comparison Cards */}
-            <div className="space-y-6">
-              {/* Current System */}
-              <div className="bg-gray-800 border-2 border-red-500 rounded-2xl p-8">
-                <p className="text-red-400 text-sm font-semibold mb-3 uppercase">SISTEMA ATUAL</p>
-                <p className="text-white text-5xl font-bold mb-4">60.00€</p>
-                <p className="text-gray-400">
-                  O banco e o software cobram a mensalidade fixa, mesmo que não trabalhe.
-                </p>
-              </div>
-
-              {/* Faturex */}
-              <div className="bg-gray-800 border-2 border-green-500 rounded-2xl p-8">
-                <p className="text-green-400 text-sm font-semibold mb-3 uppercase">FATUREX</p>
-                <p className="text-white text-5xl font-bold mb-4">0.00€</p>
-                <p className="text-gray-400">
-                  Se não fatura, não paga. O Faturex assume o risco consigo.
-                </p>
-              </div>
-            </div>
-
-            {/* Note */}
-            <p className="text-gray-500 text-sm text-center mt-8">
-              *Nota: Taxa de disponibilidade de 20€ apenas aplicada para manter o sistema ativo se houver faturação mínima registada.
-            </p>
-          </div>
+          <RiskSimulator />
         </div>
       </section>
 
@@ -172,16 +170,16 @@ export default function Home() {
       <section className="container mx-auto px-4 py-20">
         <div className="max-w-4xl mx-auto bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl p-12 text-center text-white shadow-2xl">
           <h3 className="text-4xl font-bold mb-4">
-            Junte-se ao Faturex
+            Ativa Agenda e Faturação Grátis
           </h3>
           <p className="text-xl text-blue-100 mb-8">
-            Pare de pagar por meses maus. Comece hoje e pague apenas quando fatura.
+            Pare de pagar por meses maus. Comece hoje com 0€ fixos e pague apenas quando fatura.
           </p>
           <Link
             href="/register"
             className="bg-white text-blue-600 px-10 py-5 rounded-xl hover:bg-blue-50 transition text-lg font-bold inline-flex items-center shadow-lg"
           >
-            Comece grátis
+            Começar agora com Risco Zero
             <ArrowRight className="ml-2 h-5 w-5" />
           </Link>
         </div>
