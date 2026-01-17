@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { FileText, DollarSign, UserX, CreditCard, ArrowRight, Calendar } from 'lucide-react'
 import Typewriter from '@/components/Typewriter'
 import RiskSimulator from '@/components/RiskSimulator'
+import ContactForm from '@/components/ContactForm'
 
 export default function Home() {
   return (
@@ -20,12 +21,12 @@ export default function Home() {
             >
               Login
             </Link>
-            <Link
-              href="/register"
+            <a
+              href="#contacto"
               className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition"
             >
-              Risco Zero
-            </Link>
+              Pedir Contacto
+            </a>
           </nav>
         </div>
       </header>
@@ -50,13 +51,13 @@ export default function Home() {
             TPA + Faturação Certificada + Agenda num único sistema com <span className="font-bold text-purple-600">custo fixo ZERO.</span>
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4 items-center">
-            <Link
-              href="/register"
+            <a
+              href="#contacto"
               className="bg-blue-600 text-white px-10 py-5 rounded-lg hover:bg-blue-700 transition text-lg font-bold inline-flex items-center shadow-lg hover:shadow-xl"
             >
-              Começar com Risco Zero
+              Pedir Contacto Grátis
               <ArrowRight className="ml-2 h-5 w-5" />
-            </Link>
+            </a>
             <div className="text-center sm:text-left">
               <p className="text-sm text-gray-500">Ativação única</p>
               <p className="text-2xl font-bold text-gray-900">79€</p>
@@ -321,14 +322,29 @@ export default function Home() {
             <p className="text-white text-2xl font-bold mb-4">
               Pronto para eliminar os custos fixos?
             </p>
-            <Link
-              href="/register"
+            <a
+              href="#contacto"
               className="bg-white text-blue-600 px-10 py-5 rounded-xl hover:bg-gray-50 transition text-lg font-bold inline-flex items-center shadow-lg"
             >
-              Ativar Faturex Agora (79€)
+              Pedir Contacto (79€)
               <ArrowRight className="ml-2 h-5 w-5" />
-            </Link>
+            </a>
           </div>
+        </div>
+      </section>
+
+      {/* Contact Form Section */}
+      <section id="contacto" className="container mx-auto px-4 py-20 bg-white">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12">
+            <h3 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+              Comece hoje a eliminar os custos fixos
+            </h3>
+            <p className="text-xl text-gray-600">
+              Preencha o formulário e entraremos em contacto em menos de 24 horas para ativar o seu Faturex.
+            </p>
+          </div>
+          <ContactForm />
         </div>
       </section>
 
