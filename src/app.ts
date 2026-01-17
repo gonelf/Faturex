@@ -62,7 +62,8 @@ app.get('/', (req: Request, res: Response) => {
         ],
         endpoints: {
             health: '/health',
-            invoices: '/api/invoices'
+            invoices: '/api/invoices',
+            contactLeads: '/api/contact-leads'
         }
     });
 });
@@ -136,10 +137,59 @@ const initializeRoutes = async () => {
     }
 };
 
+// Initialize contact leads routes (public, no auth required)
+let contactLeadsRoutesInitialized = false;
+
+const initializeContactLeadsRoutes = async () => {
+    if (contactLeadsRoutesInitialized) {
+        return;
+    }
+
+    // Contact leads require minimal configuration (just Supabase)
+    if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+        console.warn('Warning: Contact leads routes not initialized. Missing Supabase configuration.');
+
+        app.use('/api/contact-leads', (req: Request, res: Response) => {
+            res.status(503).json({
+                error: 'Service Unavailable',
+                message: 'Contact leads service not configured.',
+            });
+        });
+
+        return;
+    }
+
+    try {
+        const { ContactLeadsService } = await import('./services/contact-leads.service');
+        const { createContactLeadsRoutes } = await import('./api/contact-leads.routes');
+
+        const contactLeadsService = new ContactLeadsService();
+
+        // Public API route (no authentication required for contact form)
+        app.use('/api/contact-leads', createContactLeadsRoutes(contactLeadsService));
+
+        contactLeadsRoutesInitialized = true;
+        console.log('✅ Contact leads routes initialized successfully');
+    } catch (error) {
+        console.error('❌ Failed to initialize contact leads routes:', error);
+
+        app.use('/api/contact-leads', (req: Request, res: Response) => {
+            res.status(500).json({
+                error: 'Internal Server Error',
+                message: 'Failed to initialize contact leads service',
+                details: error instanceof Error ? error.message : 'Unknown error'
+            });
+        });
+    }
+};
+
 // Initialize routes on first request (lazy initialization for serverless)
 app.use(async (req: Request, res: Response, next: NextFunction) => {
     if (!routesInitialized && req.path.startsWith('/api/invoices')) {
         await initializeRoutes();
+    }
+    if (!contactLeadsRoutesInitialized && req.path.startsWith('/api/contact-leads')) {
+        await initializeContactLeadsRoutes();
     }
     next();
 });
