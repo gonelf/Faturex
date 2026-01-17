@@ -6,11 +6,11 @@ export default function RiskSimulator() {
   const [revenue, setRevenue] = useState(0)
   const [viewMode, setViewMode] = useState<'monthly' | 'annual'>('monthly')
 
-  // Faturex: Progressive rates
+  // Faturex: Competitive progressive rates
   const getFaturexRate = (rev: number) => {
-    if (rev > 5000) return 0.06
-    if (rev > 2500) return 0.07
-    return 0.08
+    if (rev > 5000) return 0.04   // 4% above 5k - very competitive
+    if (rev > 2500) return 0.05   // 5% mid-tier - attractive
+    return 0.08                    // 8% entry tier
   }
 
   const faturexRate = getFaturexRate(revenue)
@@ -20,23 +20,28 @@ export default function RiskSimulator() {
   const currentSystemCost = 60.00 + (revenue * 0.025)
   const savings = currentSystemCost - faturexCost
 
-  // Annual Calculation: 8 good months + 4 weak months (30% of normal revenue)
+  // Annual Calculation: 8 good months + 4 weak months (realistic 1000€ in weak months)
   const calculateAnnual = (goodMonthRev: number) => {
-    const badMonthRev = goodMonthRev * 0.30
+    const badMonthRev = 1000  // Fixed realistic value for weak months (vacation/low season)
 
     const calcFaturex = (rev: number) => {
-      const rate = rev > 5000 ? 0.06 : rev > 2500 ? 0.07 : 0.08
-      return rev * rate
+      if (rev > 5000) return rev * 0.04
+      if (rev > 2500) return rev * 0.05
+      return rev * 0.08
     }
 
+    const calcTrad = (rev: number) => 60 + (rev * 0.025)  // Fixed + bank fees
+
     const annualFaturex = (calcFaturex(goodMonthRev) * 8) + (calcFaturex(badMonthRev) * 4)
-    const annualTraditional = (60 * 12) + (goodMonthRev * 0.025 * 8) + (badMonthRev * 0.025 * 4)
+    const annualTraditional = (calcTrad(goodMonthRev) * 8) + (calcTrad(badMonthRev) * 4)
 
     return {
       faturex: annualFaturex,
       traditional: annualTraditional,
       savings: annualTraditional - annualFaturex,
-      monthlyAverage: (annualTraditional - annualFaturex) / 12
+      monthlyAverage: (annualTraditional - annualFaturex) / 12,
+      weakMonthFaturex: calcFaturex(badMonthRev),
+      weakMonthTrad: calcTrad(badMonthRev)
     }
   }
 
@@ -77,7 +82,7 @@ export default function RiskSimulator() {
       <p className="text-gray-300 text-center text-lg mb-8">
         {viewMode === 'monthly'
           ? 'Compara o Faturex (0€ Fixos + Agendamento Grátis) vs O teu sistema atual'
-          : 'Cenário Real: 8 meses bons + 4 meses fracos (férias, baixa época, imprevistos)'}
+          : 'Cenário Real: 8 meses bons + 4 meses fracos (~1.000€ em férias/baixa época)'}
       </p>
 
       {/* Slider */}
@@ -108,7 +113,7 @@ export default function RiskSimulator() {
             <p className="text-gray-400 text-lg mb-2">Faturação média em mês bom:</p>
             <p className="text-green-400 text-4xl font-bold">{revenue.toFixed(2)}€</p>
             <p className="text-gray-500 text-sm mt-2">
-              (Meses fracos: {(revenue * 0.3).toFixed(2)}€ - 30% do normal)
+              (Meses fracos: 1.000€ - férias/época baixa)
             </p>
           </>
         )}
@@ -146,8 +151,8 @@ export default function RiskSimulator() {
                     <p>Taxa aplicada: {(faturexRate * 100).toFixed(0)}%</p>
                     <p className="text-sm text-gray-500">
                       {revenue <= 2500 && "8% até 2.5k"}
-                      {revenue > 2500 && revenue <= 5000 && "7% até 5k"}
-                      {revenue > 5000 && "6% acima de 5k"}
+                      {revenue > 2500 && revenue <= 5000 && "5% até 5k"}
+                      {revenue > 5000 && "4% acima de 5k"}
                     </p>
                     <p className="text-green-300 font-medium mt-2">
                       ✅ Taxas de cartão incluídas
@@ -166,9 +171,9 @@ export default function RiskSimulator() {
               <p className="text-white text-5xl font-bold mb-4">{annualData.traditional.toFixed(2)}€</p>
               <div className="text-gray-400 space-y-2">
                 <p>720€ em custos fixos (60€ × 12 meses)</p>
-                <p>+ {((revenue * 0.025 * 8) + (revenue * 0.3 * 0.025 * 4)).toFixed(2)}€ em taxas de cartão</p>
+                <p>+ {((revenue * 0.025 * 8) + (1000 * 0.025 * 4)).toFixed(2)}€ em taxas de cartão</p>
                 <p className="text-sm text-red-300 mt-2">
-                  ⚠️ Pagas 720€ mesmo nos 4 meses fracos
+                  ⚠️ Pagas 720€ fixos + taxas mesmo nos meses fracos
                 </p>
               </div>
             </div>
@@ -185,9 +190,9 @@ export default function RiskSimulator() {
                 ) : (
                   <>
                     <p>8 meses bons: {(getFaturexRate(revenue) * 100).toFixed(0)}% sobre {revenue.toFixed(0)}€</p>
-                    <p>4 meses fracos: {(getFaturexRate(revenue * 0.3) * 100).toFixed(0)}% sobre {(revenue * 0.3).toFixed(0)}€</p>
+                    <p>4 meses fracos: {(getFaturexRate(1000) * 100).toFixed(0)}% sobre 1.000€</p>
                     <p className="text-green-300 font-medium mt-2">
-                      ✅ Nos meses fracos, pagas quase zero!
+                      ✅ Nos meses fracos: apenas {annualData.weakMonthFaturex.toFixed(2)}€ vs {annualData.weakMonthTrad.toFixed(2)}€!
                     </p>
                   </>
                 )}
@@ -205,11 +210,15 @@ export default function RiskSimulator() {
               <p className="text-green-400 text-2xl font-bold">
                 {savings > 0
                   ? `💰 Poupas ${savings.toFixed(2)}€ este mês!`
-                  : `Com o Faturex pagas ${Math.abs(savings).toFixed(2)}€ mais, mas sem riscos fixos e com taxas de cartão incluídas!`}
+                  : `💼 Investimento em Liberdade: Apenas ${Math.abs(savings).toFixed(2)}€ de diferença para ter 0€ de custos fixos!`}
               </p>
-              {savings > 0 && (
+              {savings > 0 ? (
                 <p className="text-gray-400 text-sm mt-2">
                   Ao ano: {(savings * 12).toFixed(2)}€ de poupança potencial!
+                </p>
+              ) : (
+                <p className="text-gray-400 text-sm mt-2">
+                  Inclui TPA físico + Agendamento + 0€ em meses de paragem
                 </p>
               )}
             </>
@@ -218,7 +227,7 @@ export default function RiskSimulator() {
               <p className="text-green-400 text-2xl font-bold">
                 {annualData.savings > 0
                   ? `🎯 Poupança anual: ${annualData.savings.toFixed(2)}€!`
-                  : `Com o Faturex pagas ${Math.abs(annualData.savings).toFixed(2)}€ mais no ano, mas sem riscos nos meses fracos!`}
+                  : `💼 Investimento em Liberdade: Apenas ${Math.abs(annualData.savings).toFixed(2)}€ de diferença anual para ter 0€ de custos fixos e Agendamento + TPA incluídos.`}
               </p>
               {annualData.savings > 0 && (
                 <p className="text-gray-400 text-sm mt-2">
@@ -227,7 +236,7 @@ export default function RiskSimulator() {
               )}
               <div className="mt-4 bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
                 <p className="text-blue-300 text-sm">
-                  💡 <strong>O segredo:</strong> Nos 4 meses fracos (Jan, Fev, Ago, Nov), enquanto o sistema tradicional cobra 240€ em rendas, o Faturex adapta-se e cobra apenas {((revenue * 0.3 * getFaturexRate(revenue * 0.3)) * 4).toFixed(2)}€. É aí que ganha!
+                  💡 <strong>O Segredo:</strong> Nos meses de faturação baixa (1.000€), enquanto o sistema tradicional lhe cobra {annualData.weakMonthTrad.toFixed(2)}€ (60€ fixos + 25€ taxas), o Faturex cobra apenas {annualData.weakMonthFaturex.toFixed(2)}€ (taxa única). A nossa taxa protege-o quando mais precisa, e nos meses bons, garante que tem o Agendex e o TPA incluídos sem rendas fixas.
                 </p>
               </div>
             </>

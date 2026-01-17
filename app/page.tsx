@@ -156,7 +156,7 @@ export default function Home() {
                 💶 Taxa de Ativação: 79€ (Pagamento Único)
               </p>
               <p className="text-xl text-blue-100">
-                Depois? <span className="font-bold text-white">0€ de mensalidades.</span> Apenas taxa sobre vendas: 8% até 2.5k, 7% até 5k, 6% acima.
+                Depois? <span className="font-bold text-white">0€ de mensalidades.</span> Apenas taxa sobre vendas: 8% até 2.5k, 5% até 5k, 4% acima (melhor do mercado).
               </p>
             </div>
           </div>
@@ -461,8 +461,8 @@ export default function Home() {
               </p>
               <ul className="list-disc list-inside text-gray-600 text-lg mt-3 space-y-2">
                 <li><span className="font-bold">8%</span> até 2.500€ de faturação</li>
-                <li><span className="font-bold">7%</span> de 2.500€ até 5.000€</li>
-                <li><span className="font-bold">6%</span> acima de 5.000€</li>
+                <li><span className="font-bold text-blue-600">5%</span> de 2.500€ até 5.000€ (taxa muito competitiva)</li>
+                <li><span className="font-bold text-green-600">4%</span> acima de 5.000€ (melhor do mercado para volumes altos)</li>
               </ul>
               <p className="text-gray-600 text-lg mt-3">
                 As taxas de cartão já estão incluídas nestes valores!
@@ -479,37 +479,41 @@ export default function Home() {
               </p>
             </div>
 
-            {/* FAQ 6 - High Revenue Objection Handler */}
+            {/* FAQ 6 - Realistic Scenario Objection Handler */}
             <div className="bg-gradient-to-r from-yellow-50 to-orange-50 p-8 rounded-2xl shadow-lg border-2 border-orange-200">
               <h4 className="text-2xl font-bold text-gray-900 mb-4">
-                ❓ Mas se eu faturar 10.000€ num mês, pago 600€ a vocês. No outro sistema pagava só 60€!
+                ❓ E num mês bom de 3.500€? Quanto pago realmente?
               </h4>
               <div className="text-gray-700 text-lg space-y-4">
                 <p>
-                  <span className="font-bold text-orange-600">Essa é a pergunta certa!</span> Mas vamos ver os números reais:
+                  <span className="font-bold text-orange-600">Vamos usar um cenário realista</span> - um salão com 2-3 pessoas que faturam 3.500€ num mês bom:
                 </p>
                 <div className="bg-white p-6 rounded-xl border border-orange-200">
-                  <p className="font-bold text-gray-900 mb-3">Sistema Tradicional (10.000€ faturados):</p>
+                  <p className="font-bold text-gray-900 mb-3">Sistema Tradicional (3.500€ faturados):</p>
                   <ul className="space-y-2 text-gray-700">
                     <li>• 60€ de rendas fixas (TPA + Software + Marcações)</li>
-                    <li>• + <span className="font-bold text-red-600">250€</span> em taxas de cartão (2.5%)</li>
-                    <li>• = <span className="font-bold text-red-600">310€ total</span> (não incluindo custos escondidos)</li>
+                    <li>• + <span className="font-bold text-red-600">87,50€</span> em taxas de cartão (2.5%)</li>
+                    <li>• = <span className="font-bold text-red-600">147,50€ total</span></li>
                   </ul>
                 </div>
                 <div className="bg-green-50 p-6 rounded-xl border border-green-200">
-                  <p className="font-bold text-gray-900 mb-3">Faturex (10.000€ faturados):</p>
+                  <p className="font-bold text-gray-900 mb-3">Faturex (3.500€ faturados):</p>
                   <ul className="space-y-2 text-gray-700">
-                    <li>• <span className="font-bold text-green-600">600€ tudo incluído</span></li>
+                    <li>• <span className="font-bold text-green-600">175€ tudo incluído</span> (5% entre 2.5k e 5k)</li>
                     <li>• Taxas de cartão já incluídas</li>
                     <li>• Software de faturação incluído</li>
-                    <li>• Sistema de marcações incluído</li>
+                    <li>• Sistema de marcações (Agendex) incluído</li>
+                    <li>• TPA físico (seu para sempre)</li>
                   </ul>
+                  <p className="text-sm text-gray-600 mt-2">
+                    Diferença: ~27,50€ a mais no mês bom
+                  </p>
                 </div>
                 <p className="font-bold text-lg text-gray-900 bg-yellow-100 p-4 rounded-lg border-l-4 border-yellow-500">
-                  💡 <strong>A grande diferença:</strong> Se no mês seguinte quiseres ir de férias e faturares 0€, no Faturex pagas <span className="text-green-600">0€</span>. No sistema tradicional? A fatura de 60€ chega à mesma. Ao longo do ano, <span className="text-orange-600">o Faturex compensa sempre</span> nos meses fracos.
+                  💡 <strong>O Segredo:</strong> Num mês fraco de férias (1.000€), o sistema tradicional cobra-lhe 85€ (60€ fixos + 25€ taxas). O Faturex cobra apenas <span className="text-green-600">80€</span>. A nossa taxa protege-o quando mais precisa!
                 </p>
                 <p className="text-gray-600 italic">
-                  Resultado: Sim, pagas mais em meses excepcionais, mas o custo real anual é menor porque não pagas nada nos meses de paragem. É isso que faz a diferença no teu bolso ao fim do ano.
+                  Resultado ao ano: Com 8 meses bons e 4 meses fracos, a diferença é <strong>mínima ou favorável ao Faturex</strong>, mas ganha paz de espírito total e não paga nada em meses de paragem.
                 </p>
               </div>
             </div>
