@@ -414,3 +414,40 @@ COMMENT ON COLUMN invoices.atcud IS 'ATCUD - Portaria n.º 195/2020 - Format: Va
 COMMENT ON COLUMN invoices.document_hash IS 'RSA-SHA1 signature for document chaining - Portaria n.º 363/2010';
 COMMENT ON COLUMN invoices.hash_control IS '4-character hash control (positions 1,11,21,31)';
 COMMENT ON COLUMN invoices.system_entry_date IS 'Immutable timestamp - cannot be changed after creation';
+
+-- ============================================================================
+-- Table: contact_leads
+-- Landing page contact form submissions
+-- ============================================================================
+CREATE TABLE contact_leads (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+
+    -- Contact information
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    phone VARCHAR(20) NOT NULL,
+    business_type VARCHAR(100),
+    message TEXT,
+
+    -- Lead status
+    status VARCHAR(20) DEFAULT 'new' CHECK (status IN ('new', 'contacted', 'qualified', 'converted', 'rejected')),
+
+    -- Source tracking
+    source VARCHAR(50) DEFAULT 'homepage_form',
+    user_agent TEXT,
+    ip_address INET,
+
+    -- Follow-up
+    notes TEXT,
+    contacted_at TIMESTAMPTZ,
+    assigned_to VARCHAR(50),
+
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_contact_leads_status ON contact_leads(status);
+CREATE INDEX idx_contact_leads_created ON contact_leads(created_at DESC);
+CREATE INDEX idx_contact_leads_email ON contact_leads(email);
+
+COMMENT ON TABLE contact_leads IS 'Homepage contact form leads for sales follow-up';

@@ -7,29 +7,45 @@ export default function ContactForm() {
     name: '',
     email: '',
     phone: '',
+    businessType: '',
     message: ''
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
+    setError(null)
 
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
 
-    // Here you would normally send the data to your backend
-    console.log('Form submitted:', formData)
+      const data = await response.json()
 
-    setIsSubmitting(false)
-    setIsSubmitted(true)
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to submit form')
+      }
 
-    // Reset form after 3 seconds
-    setTimeout(() => {
-      setFormData({ name: '', email: '', phone: '', message: '' })
-      setIsSubmitted(false)
-    }, 3000)
+      setIsSubmitted(true)
+
+      // Reset form after 5 seconds
+      setTimeout(() => {
+        setFormData({ name: '', email: '', phone: '', businessType: '', message: '' })
+        setIsSubmitted(false)
+      }, 5000)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Ocorreu um erro. Por favor tente novamente.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -55,6 +71,11 @@ export default function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit} className="bg-white p-8 rounded-2xl shadow-xl border-2 border-blue-200">
+      {error && (
+        <div className="mb-6 bg-red-50 border-2 border-red-500 rounded-lg p-4">
+          <p className="text-red-700 font-semibold">{error}</p>
+        </div>
+      )}
       <div className="grid md:grid-cols-2 gap-6">
         {/* Nome */}
         <div>
@@ -109,14 +130,14 @@ export default function ContactForm() {
 
         {/* Tipo de Negócio */}
         <div>
-          <label htmlFor="business" className="block text-sm font-semibold text-gray-700 mb-2">
+          <label htmlFor="businessType" className="block text-sm font-semibold text-gray-700 mb-2">
             Tipo de Negócio
           </label>
           <input
             type="text"
-            id="business"
-            name="business"
-            value={formData.message}
+            id="businessType"
+            name="businessType"
+            value={formData.businessType}
             onChange={handleChange}
             className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none transition"
             placeholder="Ex: Barbearia, Salão, Spa..."
