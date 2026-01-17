@@ -34,12 +34,12 @@ export default function Home() {
       <section className="container mx-auto px-4 py-20">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-5xl md:text-6xl font-bold mb-6">
-            <span className="text-blue-600">O único software que só fatura</span>
+            <span className="text-blue-600">O único software de faturação</span>
             <br />
-            <span className="text-purple-600">quando tu faturas. Ponto final.</span>
+            <span className="text-purple-600">com TPA físico e custo mensal ZERO.</span>
           </h2>
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            Sem mensalidades. Sem rendas fixas. Sem taxas de manutenção. Pagas apenas 8% por cada serviço cobrado. Se não trabalhares, o teu custo é zero absoluto.
+            Livre-se das rendas do banco. Com uma taxa única de ativação de 79€, recebe o seu terminal físico e nós migramos os seus dados. Depois, só paga se faturar.
           </p>
           <div className="flex justify-center space-x-4">
             <Link
@@ -111,6 +111,58 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Terminal & Setup Section */}
+      <section className="bg-gradient-to-r from-blue-600 to-blue-700 py-20">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <div className="inline-block bg-white/20 text-white px-6 py-2 rounded-full text-sm font-bold mb-6">
+              TUDO INCLUÍDO
+            </div>
+            <h3 className="text-4xl md:text-5xl font-bold text-white mb-6">
+              Tudo o que precisa por 79€. Sem rendas, sem surpresas.
+            </h3>
+            <p className="text-xl text-blue-100 mb-12">
+              A nossa taxa de ativação única cobre o envio do seu novo Terminal Físico e o nosso trabalho de migração. Importamos os seus clientes e produtos para que possa começar a trabalhar em 48h. Depois disso, esqueça as faturas mensais.
+            </p>
+
+            <div className="grid md:grid-cols-3 gap-8 mb-12">
+              <div className="bg-white/10 backdrop-blur-sm p-8 rounded-2xl border border-white/20">
+                <div className="text-5xl mb-4">📱</div>
+                <h4 className="text-2xl font-bold text-white mb-3">Terminal Físico</h4>
+                <p className="text-blue-100">
+                  Receba o seu Stripe Reader. Aceita pagamentos com cartão, MB Way e Apple Pay.
+                </p>
+              </div>
+
+              <div className="bg-white/10 backdrop-blur-sm p-8 rounded-2xl border border-white/20">
+                <div className="text-5xl mb-4">🔄</div>
+                <h4 className="text-2xl font-bold text-white mb-3">Migração de Dados</h4>
+                <p className="text-blue-100">
+                  Migramos todos os seus clientes, produtos e histórico do sistema antigo.
+                </p>
+              </div>
+
+              <div className="bg-white/10 backdrop-blur-sm p-8 rounded-2xl border border-white/20">
+                <div className="text-5xl mb-4">⚙️</div>
+                <h4 className="text-2xl font-bold text-white mb-3">Configuração Completa</h4>
+                <p className="text-blue-100">
+                  Configuramos tudo para si. Em 48h está pronto a faturar sem dores de cabeça.
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-white/10 backdrop-blur-sm p-8 rounded-2xl border border-white/20">
+              <p className="text-2xl font-bold text-white mb-4">
+                💶 Taxa de Ativação: 79€ (Pagamento Único)
+              </p>
+              <p className="text-xl text-blue-100">
+                Depois? <span className="font-bold text-white">0€ de mensalidades.</span> Apenas taxa sobre vendas: 8% até 2.5k, 7% até 5k, 6% acima.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Agendex Section */}
       <section className="container mx-auto px-4 py-20 bg-gradient-to-r from-purple-50 to-blue-50">
         <div className="max-w-4xl mx-auto">
@@ -159,6 +211,66 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Comparison Table Section */}
+      <section className="container mx-auto px-4 py-20">
+        <div className="max-w-5xl mx-auto">
+          <h3 className="text-4xl md:text-5xl font-bold text-center text-gray-900 mb-6">
+            Faturex vs. Sistema Tradicional
+          </h3>
+          <p className="text-xl text-gray-600 text-center mb-12">
+            Vê quanto estás a perder com custos "escondidos" no teu banco e software atual.
+          </p>
+
+          <div className="overflow-x-auto">
+            <table className="w-full bg-white rounded-2xl shadow-xl overflow-hidden">
+              <thead className="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+                <tr>
+                  <th className="px-6 py-4 text-left text-lg font-bold">Funcionalidade</th>
+                  <th className="px-6 py-4 text-left text-lg font-bold">Sistema Tradicional</th>
+                  <th className="px-6 py-4 text-left text-lg font-bold">Faturex + Agendex</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200">
+                <tr className="hover:bg-blue-50 transition">
+                  <td className="px-6 py-4 font-medium text-gray-900">Software Faturação</td>
+                  <td className="px-6 py-4 text-gray-600">~25€ /mês</td>
+                  <td className="px-6 py-4 font-bold text-green-600">0€ (Incluído)</td>
+                </tr>
+                <tr className="hover:bg-blue-50 transition">
+                  <td className="px-6 py-4 font-medium text-gray-900">App de Marcações</td>
+                  <td className="px-6 py-4 text-gray-600">~20€ /mês</td>
+                  <td className="px-6 py-4 font-bold text-green-600">0€ (Grátis)</td>
+                </tr>
+                <tr className="hover:bg-blue-50 transition">
+                  <td className="px-6 py-4 font-medium text-gray-900">Aluguer de TPA</td>
+                  <td className="px-6 py-4 text-gray-600">~15€ /mês</td>
+                  <td className="px-6 py-4 font-bold text-green-600">0€ (79€ uma vez)</td>
+                </tr>
+                <tr className="hover:bg-blue-50 transition">
+                  <td className="px-6 py-4 font-medium text-gray-900">Taxas de Cartão</td>
+                  <td className="px-6 py-4 text-gray-600">+ 1.5% a 3% por venda</td>
+                  <td className="px-6 py-4 font-bold text-green-600">Incluído na Taxa</td>
+                </tr>
+                <tr className="bg-red-50 hover:bg-red-100 transition">
+                  <td className="px-6 py-4 font-bold text-gray-900">Mês de Férias (0€ vendas)</td>
+                  <td className="px-6 py-4 font-bold text-red-600 text-xl">Pagas ~60€</td>
+                  <td className="px-6 py-4 font-bold text-green-600 text-xl">Pagas 0€</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div className="mt-8 bg-gradient-to-r from-green-50 to-blue-50 p-8 rounded-2xl border-2 border-green-200">
+            <p className="text-center text-2xl font-bold text-gray-900">
+              💰 Poupança média anual: <span className="text-green-600">720€ em custos fixos</span>
+            </p>
+            <p className="text-center text-gray-600 mt-2">
+              Sem contar os meses em que não faturas nada e pagas 0€ no Faturex!
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Risk Simulator Section */}
       <section className="bg-gray-900 py-20">
         <div className="container mx-auto px-4">
@@ -182,6 +294,75 @@ export default function Home() {
             Começar agora com Risco Zero
             <ArrowRight className="ml-2 h-5 w-5" />
           </Link>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="container mx-auto px-4 py-20 bg-gray-50">
+        <div className="max-w-4xl mx-auto">
+          <h3 className="text-4xl md:text-5xl font-bold text-center text-gray-900 mb-12">
+            Perguntas Frequentes
+          </h3>
+
+          <div className="space-y-6">
+            {/* FAQ 1 */}
+            <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-200">
+              <h4 className="text-2xl font-bold text-gray-900 mb-4">
+                ❓ O que recebo pelos 79€?
+              </h4>
+              <p className="text-gray-600 text-lg">
+                Recebe o terminal físico Stripe Reader, a configuração completa da sua conta e a migração de todos os seus dados do software antigo (clientes, produtos e histórico). É um pagamento único, sem rendas mensais.
+              </p>
+            </div>
+
+            {/* FAQ 2 */}
+            <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-200">
+              <h4 className="text-2xl font-bold text-gray-900 mb-4">
+                ❓ E se eu não faturar nada num mês?
+              </h4>
+              <p className="text-gray-600 text-lg">
+                O seu custo será exatamente <span className="font-bold text-green-600">0.00€</span>. Não há taxas de manutenção, taxas de "disponibilidade" ou qualquer outro custo escondido. Se não trabalhar, não paga. Ponto final.
+              </p>
+            </div>
+
+            {/* FAQ 3 */}
+            <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-200">
+              <h4 className="text-2xl font-bold text-gray-900 mb-4">
+                ❓ O terminal é meu?
+              </h4>
+              <p className="text-gray-600 text-lg">
+                Sim, o equipamento fica consigo e não tem qualquer aluguer mensal associado. Depois de pagar os 79€ de ativação, o terminal é seu para sempre. Sem rendas, sem devoluções.
+              </p>
+            </div>
+
+            {/* FAQ 4 */}
+            <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-200">
+              <h4 className="text-2xl font-bold text-gray-900 mb-4">
+                ❓ Como funcionam as taxas regressivas?
+              </h4>
+              <p className="text-gray-600 text-lg">
+                Quanto mais faturar, menos paga em percentagem:
+              </p>
+              <ul className="list-disc list-inside text-gray-600 text-lg mt-3 space-y-2">
+                <li><span className="font-bold">8%</span> até 2.500€ de faturação</li>
+                <li><span className="font-bold">7%</span> de 2.500€ até 5.000€</li>
+                <li><span className="font-bold">6%</span> acima de 5.000€</li>
+              </ul>
+              <p className="text-gray-600 text-lg mt-3">
+                As taxas de cartão já estão incluídas nestes valores!
+              </p>
+            </div>
+
+            {/* FAQ 5 */}
+            <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-200">
+              <h4 className="text-2xl font-bold text-gray-900 mb-4">
+                ❓ O Agendex está mesmo incluído grátis?
+              </h4>
+              <p className="text-gray-600 text-lg">
+                Sim! O sistema de agendamento online Agendex está 100% incluído sem qualquer custo adicional. Os seus clientes podem marcar 24/7, recebe confirmações automáticas e lembretes inteligentes. Tudo isto a 0€ por mês.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
