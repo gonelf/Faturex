@@ -384,11 +384,11 @@ export default function Home() {
                 </div>
                 <div>
                   <p className="text-gray-400 text-sm">Até 5.000€</p>
-                  <p className="text-white font-bold text-xl">5%</p>
+                  <p className="text-white font-bold text-xl">6%</p>
                 </div>
                 <div>
                   <p className="text-gray-400 text-sm">Acima 5.000€</p>
-                  <p className="text-white font-bold text-xl">4%</p>
+                  <p className="text-white font-bold text-xl">5%</p>
                 </div>
               </div>
 
