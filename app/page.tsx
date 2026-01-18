@@ -43,9 +43,9 @@ export default function Home() {
           </div>
 
           <h2 className="text-5xl md:text-6xl font-bold mb-6">
-            <span className="text-gray-900">Foque-se no seu talento,</span>
+            <span className="text-gray-900">Faturação completa e automática</span>
             <br />
-            <span className="text-blue-600">nós tratamos do resto.</span>
+            <span className="text-blue-600">sem mensalidades.</span>
           </h2>
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
             TPA + Faturação Certificada + Agenda num único sistema com <span className="font-bold text-purple-600">custo fixo ZERO.</span>
@@ -243,11 +243,11 @@ export default function Home() {
                 </div>
                 <div>
                   <p className="text-gray-400 text-sm">Até 5.000€</p>
-                  <p className="text-white font-bold text-xl">5%</p>
+                  <p className="text-white font-bold text-xl">7%</p>
                 </div>
                 <div>
                   <p className="text-gray-400 text-sm">Acima 5.000€</p>
-                  <p className="text-white font-bold text-xl">4%</p>
+                  <p className="text-white font-bold text-xl">5%</p>
                 </div>
               </div>
             </div>
