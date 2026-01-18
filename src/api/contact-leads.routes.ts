@@ -35,9 +35,18 @@ export function createContactLeadsRoutes(contactLeadsService: ContactLeadsServic
         });
       }
 
-      // Basic email validation
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      // RFC 5322 compliant email validation
+      // This regex is compatible with Resend's validation requirements
+      const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
       if (!emailRegex.test(email)) {
+        return res.status(400).json({
+          success: false,
+          error: 'Email inválido',
+        });
+      }
+
+      // Additional validation: check for common invalid patterns
+      if (email.includes('..') || email.startsWith('.') || email.includes('@.') || email.includes('.@')) {
         return res.status(400).json({
           success: false,
           error: 'Email inválido',

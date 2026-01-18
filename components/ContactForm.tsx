@@ -14,10 +14,34 @@ export default function ContactForm() {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  const validateEmail = (email: string): boolean => {
+    // RFC 5322 compliant email validation (compatible with Resend)
+    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
+
+    // Check basic pattern
+    if (!emailRegex.test(email)) {
+      return false
+    }
+
+    // Check for invalid patterns
+    if (email.includes('..') || email.startsWith('.') || email.includes('@.') || email.includes('.@')) {
+      return false
+    }
+
+    return true
+  }
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
     setError(null)
+
+    // Validate email before submitting
+    if (!validateEmail(formData.email)) {
+      setError('Por favor, insira um endereço de email válido')
+      setIsSubmitting(false)
+      return
+    }
 
     try {
       const response = await fetch('/api/contact-leads', {
