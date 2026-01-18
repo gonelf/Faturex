@@ -1,7 +1,14 @@
 import { Resend } from 'resend';
 
-// Initialize Resend with API key from environment
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Lazy-load Resend instance to avoid build-time initialization
+let resend: Resend | null = null;
+
+function getResendClient(): Resend {
+  if (!resend) {
+    resend = new Resend(process.env.RESEND_API_KEY);
+  }
+  return resend;
+}
 
 interface ContactLead {
   id: string;
@@ -73,7 +80,7 @@ export async function sendNewLeadNotification(lead: ContactLead): Promise<void> 
   });
 
   try {
-    const { data, error } = await resend.emails.send({
+    const { data, error } = await getResendClient().emails.send({
       from: emailFrom,
       to: emailTo,
       subject: `🎯 Novo Lead de Contrato - ${lead.name}`,
