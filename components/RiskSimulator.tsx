@@ -3,16 +3,19 @@
 import { useState } from 'react'
 
 export default function RiskSimulator() {
-  const [revenue, setRevenue] = useState(0)
-  const [viewMode, setViewMode] = useState<'monthly' | 'annual'>('monthly')
+  const [goodMonthRevenue, setGoodMonthRevenue] = useState(3500)
+  const [badMonthRevenue, setBadMonthRevenue] = useState(1000)
+  const [viewMode, setViewMode] = useState<'monthly' | 'annual'>('annual')
 
   // Faturex: Competitive progressive rates
   const getFaturexRate = (rev: number) => {
-    if (rev > 5000) return 0.04   // 4% above 5k - very competitive
-    if (rev > 2500) return 0.05   // 5% mid-tier - attractive
+    if (rev > 5000) return 0.05   // 5% above 5k
+    if (rev > 2500) return 0.06   // 6% mid-tier
     return 0.08                    // 8% entry tier
   }
 
+  // Calculate for monthly view (using good month as reference)
+  const revenue = goodMonthRevenue
   const faturexRate = getFaturexRate(revenue)
   const faturexCost = revenue * faturexRate
 
@@ -20,32 +23,37 @@ export default function RiskSimulator() {
   const currentSystemCost = 60.00 + (revenue * 0.025)
   const savings = currentSystemCost - faturexCost
 
-  // Annual Calculation: 8 good months + 4 weak months (realistic 1000€ in weak months)
-  const calculateAnnual = (goodMonthRev: number) => {
-    const badMonthRev = 1000  // Fixed realistic value for weak months (vacation/low season)
+  // Annual Calculation: 4 good + 4 medium + 4 bad months
+  const calculateAnnual = (goodMonthRev: number, badMonthRev: number) => {
+    const mediumMonthRev = (goodMonthRev + badMonthRev) / 2
 
     const calcFaturex = (rev: number) => {
-      if (rev > 5000) return rev * 0.04
-      if (rev > 2500) return rev * 0.05
+      if (rev > 5000) return rev * 0.05
+      if (rev > 2500) return rev * 0.06
       return rev * 0.08
     }
 
     const calcTrad = (rev: number) => 60 + (rev * 0.025)  // Fixed + bank fees
 
-    const annualFaturex = (calcFaturex(goodMonthRev) * 8) + (calcFaturex(badMonthRev) * 4)
-    const annualTraditional = (calcTrad(goodMonthRev) * 8) + (calcTrad(badMonthRev) * 4)
+    const annualFaturex = (calcFaturex(goodMonthRev) * 4) + (calcFaturex(mediumMonthRev) * 4) + (calcFaturex(badMonthRev) * 4)
+    const annualTraditional = (calcTrad(goodMonthRev) * 4) + (calcTrad(mediumMonthRev) * 4) + (calcTrad(badMonthRev) * 4)
 
     return {
       faturex: annualFaturex,
       traditional: annualTraditional,
       savings: annualTraditional - annualFaturex,
       monthlyAverage: (annualTraditional - annualFaturex) / 12,
-      weakMonthFaturex: calcFaturex(badMonthRev),
-      weakMonthTrad: calcTrad(badMonthRev)
+      goodMonthFaturex: calcFaturex(goodMonthRev),
+      goodMonthTrad: calcTrad(goodMonthRev),
+      mediumMonthFaturex: calcFaturex(mediumMonthRev),
+      mediumMonthTrad: calcTrad(mediumMonthRev),
+      badMonthFaturex: calcFaturex(badMonthRev),
+      badMonthTrad: calcTrad(badMonthRev),
+      mediumMonthRev
     }
   }
 
-  const annualData = calculateAnnual(revenue)
+  const annualData = calculateAnnual(goodMonthRevenue, badMonthRevenue)
 
   return (
     <div className="max-w-3xl mx-auto">
@@ -82,41 +90,58 @@ export default function RiskSimulator() {
       <p className="text-gray-300 text-center text-lg mb-8">
         {viewMode === 'monthly'
           ? 'Compara o Faturex (0€ Fixos + Agendamento Grátis) vs O teu sistema atual'
-          : 'Cenário Real: 8 meses bons + 4 meses fracos (~1.000€ em férias/baixa época)'}
+          : 'Cenário Real: 4 meses bons + 4 meses médios + 4 meses maus'}
       </p>
 
-      {/* Slider */}
-      <div className="mb-8">
-        <input
-          type="range"
-          min="0"
-          max="10000"
-          step="100"
-          value={revenue}
-          onChange={(e) => setRevenue(Number(e.target.value))}
-          className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
-          style={{
-            background: `linear-gradient(to right, #10b981 0%, #10b981 ${(revenue / 10000) * 100}%, #374151 ${(revenue / 10000) * 100}%, #374151 100%)`
-          }}
-        />
-      </div>
+      {/* Sliders */}
+      <div className="space-y-8 mb-10">
+        {/* Good Month Slider */}
+        <div>
+          <div className="flex justify-between items-center mb-3">
+            <label className="text-gray-300 font-medium">Mês Bom:</label>
+            <span className="text-green-400 text-2xl font-bold">{goodMonthRevenue.toFixed(0)}€</span>
+          </div>
+          <input
+            type="range"
+            min="0"
+            max="5000"
+            step="100"
+            value={goodMonthRevenue}
+            onChange={(e) => setGoodMonthRevenue(Number(e.target.value))}
+            className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
+            style={{
+              background: `linear-gradient(to right, #10b981 0%, #10b981 ${(goodMonthRevenue / 5000) * 100}%, #374151 ${(goodMonthRevenue / 5000) * 100}%, #374151 100%)`
+            }}
+          />
+        </div>
 
-      {/* Billing Display */}
-      <div className="text-center mb-10">
-        {viewMode === 'monthly' ? (
-          <>
-            <p className="text-gray-400 text-lg mb-2">Faturação este mês:</p>
-            <p className="text-green-400 text-4xl font-bold">{revenue.toFixed(2)}€</p>
-          </>
-        ) : (
-          <>
-            <p className="text-gray-400 text-lg mb-2">Faturação média em mês bom:</p>
-            <p className="text-green-400 text-4xl font-bold">{revenue.toFixed(2)}€</p>
-            <p className="text-gray-500 text-sm mt-2">
-              (Meses fracos: 1.000€ - férias/época baixa)
-            </p>
-          </>
-        )}
+        {/* Bad Month Slider */}
+        <div>
+          <div className="flex justify-between items-center mb-3">
+            <label className="text-gray-300 font-medium">Mês Mau:</label>
+            <span className="text-yellow-400 text-2xl font-bold">{badMonthRevenue.toFixed(0)}€</span>
+          </div>
+          <input
+            type="range"
+            min="0"
+            max="5000"
+            step="100"
+            value={badMonthRevenue}
+            onChange={(e) => setBadMonthRevenue(Number(e.target.value))}
+            className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
+            style={{
+              background: `linear-gradient(to right, #eab308 0%, #eab308 ${(badMonthRevenue / 5000) * 100}%, #374151 ${(badMonthRevenue / 5000) * 100}%, #374151 100%)`
+            }}
+          />
+        </div>
+
+        {/* Medium Month Display */}
+        <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-4">
+          <div className="flex justify-between items-center">
+            <span className="text-gray-400">Mês Médio (calculado):</span>
+            <span className="text-blue-400 text-xl font-bold">{annualData.mediumMonthRev.toFixed(0)}€</span>
+          </div>
+        </div>
       </div>
 
       {/* Comparison Cards */}
@@ -151,8 +176,8 @@ export default function RiskSimulator() {
                     <p>Taxa aplicada: {(faturexRate * 100).toFixed(0)}%</p>
                     <p className="text-sm text-gray-500">
                       {revenue <= 2500 && "8% até 2.5k"}
-                      {revenue > 2500 && revenue <= 5000 && "5% até 5k"}
-                      {revenue > 5000 && "4% acima de 5k"}
+                      {revenue > 2500 && revenue <= 5000 && "6% até 5k"}
+                      {revenue > 5000 && "5% acima de 5k"}
                     </p>
                     <p className="text-green-300 font-medium mt-2">
                       ✅ Taxas de cartão incluídas
@@ -170,8 +195,13 @@ export default function RiskSimulator() {
               <p className="text-red-400 text-sm font-semibold mb-3 uppercase">SISTEMA ATUAL (ANO COMPLETO)</p>
               <p className="text-white text-5xl font-bold mb-4">{annualData.traditional.toFixed(2)}€</p>
               <div className="text-gray-400 space-y-2">
-                <p>720€ em custos fixos (60€ × 12 meses)</p>
-                <p>+ {((revenue * 0.025 * 8) + (1000 * 0.025 * 4)).toFixed(2)}€ em taxas de cartão</p>
+                <p className="font-semibold text-white">720€ em custos fixos (60€ × 12 meses)</p>
+                <p>+ {((goodMonthRevenue * 0.025 * 4) + (annualData.mediumMonthRev * 0.025 * 4) + (badMonthRevenue * 0.025 * 4)).toFixed(2)}€ em taxas de cartão</p>
+                <div className="mt-4 pt-4 border-t border-gray-700">
+                  <p className="text-sm">4 meses bons: {annualData.goodMonthTrad.toFixed(2)}€ × 4 = {(annualData.goodMonthTrad * 4).toFixed(2)}€</p>
+                  <p className="text-sm">4 meses médios: {annualData.mediumMonthTrad.toFixed(2)}€ × 4 = {(annualData.mediumMonthTrad * 4).toFixed(2)}€</p>
+                  <p className="text-sm">4 meses maus: {annualData.badMonthTrad.toFixed(2)}€ × 4 = {(annualData.badMonthTrad * 4).toFixed(2)}€</p>
+                </div>
                 <p className="text-sm text-red-300 mt-2">
                   ⚠️ Pagas 720€ fixos + taxas mesmo nos meses fracos
                 </p>
@@ -183,16 +213,21 @@ export default function RiskSimulator() {
               <p className="text-green-400 text-sm font-semibold mb-3 uppercase">FATUREX (ANO COMPLETO)</p>
               <p className="text-white text-5xl font-bold mb-4">{annualData.faturex.toFixed(2)}€</p>
               <div className="text-gray-400 space-y-2">
-                {revenue === 0 ? (
+                {goodMonthRevenue === 0 ? (
                   <p className="text-green-300 font-medium">
                     ✅ Define uma faturação para ver o cenário anual realista
                   </p>
                 ) : (
                   <>
-                    <p>8 meses bons: {(getFaturexRate(revenue) * 100).toFixed(0)}% sobre {revenue.toFixed(0)}€</p>
-                    <p>4 meses fracos: {(getFaturexRate(1000) * 100).toFixed(0)}% sobre 1.000€</p>
+                    <p className="font-semibold text-white">0€ em custos fixos</p>
+                    <p>Apenas comissões sobre faturação real</p>
+                    <div className="mt-4 pt-4 border-t border-gray-700">
+                      <p className="text-sm">4 meses bons ({goodMonthRevenue.toFixed(0)}€): {annualData.goodMonthFaturex.toFixed(2)}€ × 4 = {(annualData.goodMonthFaturex * 4).toFixed(2)}€</p>
+                      <p className="text-sm">4 meses médios ({annualData.mediumMonthRev.toFixed(0)}€): {annualData.mediumMonthFaturex.toFixed(2)}€ × 4 = {(annualData.mediumMonthFaturex * 4).toFixed(2)}€</p>
+                      <p className="text-sm">4 meses maus ({badMonthRevenue.toFixed(0)}€): {annualData.badMonthFaturex.toFixed(2)}€ × 4 = {(annualData.badMonthFaturex * 4).toFixed(2)}€</p>
+                    </div>
                     <p className="text-green-300 font-medium mt-2">
-                      ✅ Nos meses fracos: apenas {annualData.weakMonthFaturex.toFixed(2)}€ vs {annualData.weakMonthTrad.toFixed(2)}€!
+                      ✅ Nos meses maus: apenas {annualData.badMonthFaturex.toFixed(2)}€ vs {annualData.badMonthTrad.toFixed(2)}€!
                     </p>
                   </>
                 )}
@@ -204,9 +239,9 @@ export default function RiskSimulator() {
 
       {/* Savings Indicator */}
       {revenue > 0 && (
-        <div className="mt-8 text-center">
+        <div className="mt-8">
           {viewMode === 'monthly' ? (
-            <>
+            <div className="text-center">
               <p className="text-green-400 text-2xl font-bold">
                 {savings > 0
                   ? `💰 Poupas ${savings.toFixed(2)}€ este mês!`
@@ -221,22 +256,36 @@ export default function RiskSimulator() {
                   Inclui TPA físico + Agendamento + 0€ em meses de paragem
                 </p>
               )}
-            </>
+            </div>
           ) : (
             <>
-              <p className="text-green-400 text-2xl font-bold">
-                {annualData.savings > 0
-                  ? `🎯 Poupança anual: ${annualData.savings.toFixed(2)}€!`
-                  : `💼 Investimento em Liberdade: Apenas ${Math.abs(annualData.savings).toFixed(2)}€ de diferença anual para ter 0€ de custos fixos e Agendamento + TPA incluídos.`}
-              </p>
-              {annualData.savings > 0 && (
-                <p className="text-gray-400 text-sm mt-2">
-                  Média mensal: Poupas {annualData.monthlyAverage.toFixed(2)}€ por mês!
-                </p>
-              )}
-              <div className="mt-4 bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
-                <p className="text-blue-300 text-sm">
-                  💡 <strong>O Segredo:</strong> Nos meses de faturação baixa (1.000€), enquanto o sistema tradicional lhe cobra {annualData.weakMonthTrad.toFixed(2)}€ (60€ fixos + 25€ taxas), o Faturex cobra apenas {annualData.weakMonthFaturex.toFixed(2)}€ (taxa única). A nossa taxa protege-o quando mais precisa, e nos meses bons, garante que tem o Agendex e o TPA incluídos sem rendas fixas.
+              {/* Savings Highlight Box */}
+              <div className="bg-gradient-to-r from-green-500/20 to-blue-500/20 border-2 border-green-500 rounded-2xl p-8 mb-6">
+                <div className="text-center">
+                  <p className="text-gray-300 text-lg mb-2">Poupança Anual Total</p>
+                  <p className="text-green-400 text-6xl font-bold mb-4">
+                    {annualData.savings > 0 ? annualData.savings.toFixed(2) : '0.00'}€
+                  </p>
+                  {annualData.savings > 0 ? (
+                    <>
+                      <p className="text-green-300 text-xl font-semibold mb-2">
+                        🎯 Poupas {annualData.savings.toFixed(2)}€ por ano!
+                      </p>
+                      <p className="text-gray-400 text-lg">
+                        Média mensal: {annualData.monthlyAverage.toFixed(2)}€ por mês
+                      </p>
+                    </>
+                  ) : (
+                    <p className="text-gray-300 text-lg">
+                      💼 Investimento em Liberdade: Apenas {Math.abs(annualData.savings).toFixed(2)}€ de diferença anual para ter 0€ de custos fixos e Agendamento + TPA incluídos.
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-6">
+                <p className="text-blue-300">
+                  💡 <strong>O Segredo:</strong> Nos meses maus ({badMonthRevenue.toFixed(0)}€), enquanto o sistema tradicional cobra {annualData.badMonthTrad.toFixed(2)}€ (60€ fixos + taxas), o Faturex cobra apenas {annualData.badMonthFaturex.toFixed(2)}€. A nossa taxa protege-o quando mais precisa, e nos meses bons, garante que tem o Agendex e o TPA incluídos sem rendas fixas.
                 </p>
               </div>
             </>
@@ -245,10 +294,10 @@ export default function RiskSimulator() {
       )}
 
       {/* Zero Revenue Highlight */}
-      {revenue === 0 && (
+      {(goodMonthRevenue === 0 && badMonthRevenue === 0) && (
         <div className="mt-8 bg-green-500/10 border-2 border-green-500 rounded-xl p-6">
           <p className="text-green-400 text-xl font-bold text-center">
-            🎯 No sistema tradicional pagarias 60€ por este mês!
+            🎯 No sistema tradicional pagarias 60€ por mês mesmo sem faturar!
           </p>
           <p className="text-gray-300 text-center mt-2">
             Com o Faturex, meses de férias ou paragens custam 0€.
