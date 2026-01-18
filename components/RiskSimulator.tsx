@@ -8,8 +8,8 @@ export default function RiskSimulator() {
 
   // Faturex: Competitive progressive rates
   const getFaturexRate = (rev: number) => {
-    if (rev > 5000) return 0.04   // 4% above 5k - very competitive
-    if (rev > 2500) return 0.05   // 5% mid-tier - attractive
+    if (rev > 5000) return 0.05   // 5% above 5k - very competitive
+    if (rev > 2500) return 0.07   // 7% mid-tier - attractive
     return 0.08                    // 8% entry tier
   }
 
@@ -25,8 +25,8 @@ export default function RiskSimulator() {
     const badMonthRev = 1000  // Fixed realistic value for weak months (vacation/low season)
 
     const calcFaturex = (rev: number) => {
-      if (rev > 5000) return rev * 0.04
-      if (rev > 2500) return rev * 0.05
+      if (rev > 5000) return rev * 0.05
+      if (rev > 2500) return rev * 0.07
       return rev * 0.08
     }
 
@@ -151,8 +151,8 @@ export default function RiskSimulator() {
                     <p>Taxa aplicada: {(faturexRate * 100).toFixed(0)}%</p>
                     <p className="text-sm text-gray-500">
                       {revenue <= 2500 && "8% até 2.5k"}
-                      {revenue > 2500 && revenue <= 5000 && "5% até 5k"}
-                      {revenue > 5000 && "4% acima de 5k"}
+                      {revenue > 2500 && revenue <= 5000 && "7% até 5k"}
+                      {revenue > 5000 && "5% acima de 5k"}
                     </p>
                     <p className="text-green-300 font-medium mt-2">
                       ✅ Taxas de cartão incluídas
