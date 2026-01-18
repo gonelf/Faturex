@@ -119,6 +119,20 @@ Execute the schema in Supabase SQL Editor or using psql:
 psql -h your-db-host -U postgres -d postgres -f database/schema.sql
 ```
 
+#### Apply Migrations
+
+If you encounter schema-related errors (e.g., "Could not find column in schema cache"), apply the migrations:
+
+```bash
+# In Supabase SQL Editor, run:
+# database/migrations/001_fix_contact_leads_notification_columns.sql
+
+# Or using psql:
+psql -h your-db-host -U postgres -d postgres -f database/migrations/001_fix_contact_leads_notification_columns.sql
+```
+
+See `database/migrations/README.md` for more details.
+
 ### 6. Build and run
 
 ```bash
