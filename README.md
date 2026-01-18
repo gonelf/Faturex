@@ -101,6 +101,11 @@ Required variables:
 - `RSA_PRIVATE_KEY` - Your RSA private key (PEM format)
 - `COMPANY_NIF` - Your company's Portuguese NIF (9 digits)
 
+Optional variables for email notifications:
+- `RESEND_API_KEY` - Your Resend API key (get one at https://resend.com/api-keys)
+- `EMAIL_FROM` - From email address (e.g., "Faturex <noreply@yourdomain.com>")
+- `LEAD_NOTIFICATION_EMAIL` - Email address to receive new lead notifications
+
 ### 5. Setup database
 
 ```bash
@@ -177,6 +182,13 @@ npm run backend:start
 - **Finalize**: Convert draft to immutable finalized document
 - **Cancel**: Cancel draft invoices with reason tracking
 - **Status Indicators**: Visual badges for draft/finalized/cancelled states
+
+### Contact Leads & Email Notifications
+- **Contact Form**: Public contact form on the homepage for lead generation
+- **Lead Storage**: All contact submissions stored in the database with metadata
+- **Email Notifications**: Automatic email notifications for new leads
+- **Lead Management**: Track lead status (new, contacted, qualified, converted, rejected)
+- **API Endpoints**: RESTful API for managing contact leads
 
 ## API Usage
 
@@ -258,6 +270,65 @@ Authorization: Bearer YOUR_TOKEN
 
 **Note**: Cannot cancel finalized invoices.
 
+### Contact Leads API
+
+#### Submit Contact Form (Public, No Auth Required)
+
+```bash
+POST /api/contact-leads
+Content-Type: application/json
+
+{
+  "name": "João Silva",
+  "email": "joao@example.com",
+  "phone": "+351 912 345 678",
+  "business_type": "Consultoria",
+  "message": "Gostaria de saber mais sobre os vossos serviços"
+}
+```
+
+Response:
+```json
+{
+  "success": true,
+  "data": {
+    "id": "lead-uuid",
+    "name": "João Silva",
+    "email": "joao@example.com",
+    "status": "new",
+    "notification_sent": true,
+    "created_at": "2026-01-17T15:30:00Z"
+  },
+  "message": "Contacto registado com sucesso. Entraremos em contacto brevemente."
+}
+```
+
+**Features**:
+- Automatic email notification sent to configured LEAD_NOTIFICATION_EMAIL
+- Captures user metadata (IP address, user agent, source)
+- No authentication required (public endpoint)
+- Email includes all lead details with a beautiful HTML template
+
+#### Get All Contact Leads (Auth Required)
+
+```bash
+GET /api/contact-leads?status=new&limit=10
+Authorization: Bearer YOUR_TOKEN
+```
+
+#### Update Lead Status (Auth Required)
+
+```bash
+PATCH /api/contact-leads/:id/status
+Content-Type: application/json
+Authorization: Bearer YOUR_TOKEN
+
+{
+  "status": "contacted",
+  "notes": "Cliente contactado via email"
+}
+```
+
 ## Database Schema
 
 ### Key Tables
@@ -286,6 +357,12 @@ Authorization: Bearer YOUR_TOKEN
 - SAF-T Field 2.5 - Tax Table
 - Supports IVA and IS tax types
 - Regional rates for PT, PT-MA (Madeira), PT-AC (Açores)
+
+#### contact_leads
+- Stores contact form submissions for lead generation
+- Tracks lead status and contact history
+- Email notification tracking (sent/not sent)
+- Captures source, IP address, and user agent metadata
 
 ## SAF-T Field Mapping
 
