@@ -80,7 +80,7 @@ export function createContactLeadsRoutes(contactLeadsService: ContactLeadsServic
         error,
         errorMessage: error?.message,
         errorStack: error?.stack,
-        requestBody: { name, email, phone, business_type, message, source },
+        requestBody: req.body,
       });
 
       // In development, include more error details
