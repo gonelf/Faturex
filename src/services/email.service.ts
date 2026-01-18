@@ -28,26 +28,78 @@ export async function sendNewLeadNotification(lead: ContactLead): Promise<void> 
     return;
   }
 
+  // Validate email addresses before attempting to send
+  const emailFrom = process.env.EMAIL_FROM || 'Faturex <noreply@faturex.com>';
+  const emailTo = process.env.LEAD_NOTIFICATION_EMAIL;
+
+  // Email validation regex (RFC 5322 compliant)
+  const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+
+  // Extract email from "Name <email@domain.com>" format
+  const extractEmail = (str: string): string => {
+    const match = str.match(/<([^>]+)>/);
+    return match ? match[1] : str;
+  };
+
+  const fromEmail = extractEmail(emailFrom);
+  const toEmail = extractEmail(emailTo);
+
+  // Validate FROM email
+  if (!emailRegex.test(fromEmail)) {
+    console.error(`[EMAIL CONFIG ERROR] Invalid EMAIL_FROM: "${emailFrom}" (extracted: "${fromEmail}")`);
+    console.error('Please check your .env file and ensure EMAIL_FROM is a valid email address.');
+    throw new Error(`Invalid EMAIL_FROM configuration: "${emailFrom}". Expected format: "Name <email@domain.com>" or "email@domain.com"`);
+  }
+
+  // Validate TO email
+  if (!emailRegex.test(toEmail)) {
+    console.error(`[EMAIL CONFIG ERROR] Invalid LEAD_NOTIFICATION_EMAIL: "${emailTo}" (extracted: "${toEmail}")`);
+    console.error('Please check your .env file and ensure LEAD_NOTIFICATION_EMAIL is a valid email address.');
+    throw new Error(`Invalid LEAD_NOTIFICATION_EMAIL configuration: "${emailTo}". Must be a valid email address.`);
+  }
+
   const emailHtml = generateLeadNotificationHtml(lead);
   const emailText = generateLeadNotificationText(lead);
 
+  // Log email configuration for debugging
+  console.log('[EMAIL DEBUG] Sending email with configuration:', {
+    from: emailFrom,
+    to: emailTo,
+    fromExtracted: fromEmail,
+    toExtracted: toEmail,
+    subject: `🎯 Novo Lead de Contrato - ${lead.name}`,
+    leadEmail: lead.email,
+    leadName: lead.name,
+  });
+
   try {
     const { data, error } = await resend.emails.send({
-      from: process.env.EMAIL_FROM || 'Faturex <noreply@faturex.com>',
-      to: process.env.LEAD_NOTIFICATION_EMAIL,
+      from: emailFrom,
+      to: emailTo,
       subject: `🎯 Novo Lead de Contrato - ${lead.name}`,
       html: emailHtml,
       text: emailText,
     });
 
     if (error) {
-      console.error('Failed to send lead notification email:', error);
-      throw new Error(`Email sending failed: ${error.message}`);
+      console.error('[EMAIL ERROR] Failed to send lead notification email:', {
+        error,
+        errorMessage: error.message,
+        errorName: error.name,
+        from: emailFrom,
+        to: emailTo,
+      });
+      throw new Error(`Email sending failed: ${error.message} | FROM: ${emailFrom} | TO: ${emailTo}`);
     }
 
     console.log('Lead notification email sent successfully:', data);
   } catch (error) {
-    console.error('Error sending lead notification:', error);
+    console.error('[EMAIL EXCEPTION] Error sending lead notification:', {
+      error,
+      errorMessage: error instanceof Error ? error.message : String(error),
+      from: emailFrom,
+      to: emailTo,
+    });
     throw error;
   }
 }

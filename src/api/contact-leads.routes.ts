@@ -76,11 +76,23 @@ export function createContactLeadsRoutes(contactLeadsService: ContactLeadsServic
         message: 'Contacto registado com sucesso. Entraremos em contacto brevemente.',
       });
     } catch (error: any) {
-      console.error('Error creating contact lead:', error);
+      console.error('[API ERROR] Error creating contact lead:', {
+        error,
+        errorMessage: error?.message,
+        errorStack: error?.stack,
+        requestBody: { name, email, phone, business_type, message, source },
+      });
+
+      // In development, include more error details
+      const isDevelopment = process.env.NODE_ENV === 'development';
+      const errorMessage = isDevelopment && error?.message
+        ? `Erro: ${error.message}`
+        : 'Erro ao registar contacto. Por favor, tente novamente.';
 
       res.status(500).json({
         success: false,
-        error: 'Erro ao registar contacto. Por favor, tente novamente.',
+        error: errorMessage,
+        ...(isDevelopment && { debug: { message: error?.message, stack: error?.stack } }),
       });
     }
   });
