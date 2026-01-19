@@ -4,8 +4,7 @@ import { useState } from 'react'
 import { Calculator, TrendingUp } from 'lucide-react'
 
 export default function PriceCalculator() {
-  const [currentPrice, setCurrentPrice] = useState<string>('')
-  const [showResult, setShowResult] = useState(false)
+  const [currentPrice, setCurrentPrice] = useState<string>('50')
 
   const calculateNewPrice = () => {
     const price = parseFloat(currentPrice)
@@ -16,15 +15,9 @@ export default function PriceCalculator() {
     return price / (1 - 0.08)
   }
 
-  const handleCalculate = () => {
-    const price = parseFloat(currentPrice)
-    if (!isNaN(price) && price > 0) {
-      setShowResult(true)
-    }
-  }
-
   const newPrice = calculateNewPrice()
   const difference = newPrice - parseFloat(currentPrice || '0')
+  const hasValidPrice = !isNaN(parseFloat(currentPrice)) && parseFloat(currentPrice) > 0
 
   return (
     <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-8 border-2 border-blue-200">
@@ -41,57 +34,41 @@ export default function PriceCalculator() {
       </div>
 
       <div className="max-w-2xl mx-auto">
-        {/* Input Section */}
-        <div className="bg-white rounded-xl p-6 shadow-lg mb-6">
-          <label className="block text-gray-700 font-semibold mb-3 text-lg">
-            Qual é o seu preço atual de serviço?
-          </label>
-          <div className="flex gap-4 items-end">
-            <div className="flex-1">
+        {/* Result Section - Always visible with editable input */}
+        <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-xl p-6 shadow-xl text-white">
+          <div className="flex items-center justify-center gap-2 mb-6">
+            <TrendingUp className="h-6 w-6" />
+            <h4 className="text-2xl font-bold">Resultado</h4>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6 mb-6">
+            {/* Editable Current Price */}
+            <div className="bg-white/20 rounded-lg p-4 backdrop-blur">
+              <p className="text-green-100 text-sm mb-2">Preço Atual</p>
               <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-xl">€</span>
                 <input
                   type="number"
                   min="0"
                   step="0.01"
                   value={currentPrice}
-                  onChange={(e) => {
-                    setCurrentPrice(e.target.value)
-                    setShowResult(false)
-                  }}
-                  placeholder="Ex: 50.00"
-                  className="w-full pl-10 pr-4 py-4 text-2xl font-bold border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none transition"
+                  onChange={(e) => setCurrentPrice(e.target.value)}
+                  className="w-full bg-white/30 border-2 border-white/40 rounded-lg px-3 py-2 text-3xl font-bold text-white placeholder-white/60 focus:bg-white/40 focus:border-white focus:outline-none transition"
+                  placeholder="0.00"
                 />
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-3xl font-bold text-white">€</span>
               </div>
             </div>
-            <button
-              onClick={handleCalculate}
-              className="bg-blue-600 text-white px-8 py-4 rounded-lg hover:bg-blue-700 transition font-semibold text-lg shadow-lg hover:shadow-xl"
-            >
-              Calcular
-            </button>
+
+            {/* Calculated New Price */}
+            <div className="bg-white/20 rounded-lg p-4 backdrop-blur">
+              <p className="text-green-100 text-sm mb-1">Novo Preço (com Faturex)</p>
+              <p className="text-3xl font-bold">
+                {hasValidPrice ? newPrice.toFixed(2) : '0.00'}€
+              </p>
+            </div>
           </div>
-        </div>
 
-        {/* Result Section */}
-        {showResult && newPrice > 0 && (
-          <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-xl p-6 shadow-xl text-white animate-in fade-in duration-500">
-            <div className="flex items-center justify-center gap-2 mb-4">
-              <TrendingUp className="h-6 w-6" />
-              <h4 className="text-2xl font-bold">Resultado</h4>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-6 mb-6">
-              <div className="bg-white/20 rounded-lg p-4 backdrop-blur">
-                <p className="text-green-100 text-sm mb-1">Preço Atual</p>
-                <p className="text-3xl font-bold">{parseFloat(currentPrice).toFixed(2)}€</p>
-              </div>
-              <div className="bg-white/20 rounded-lg p-4 backdrop-blur">
-                <p className="text-green-100 text-sm mb-1">Novo Preço (com Faturex)</p>
-                <p className="text-3xl font-bold">{newPrice.toFixed(2)}€</p>
-              </div>
-            </div>
-
+          {hasValidPrice && (
             <div className="bg-white/10 rounded-lg p-4 backdrop-blur border border-white/20">
               <p className="text-lg mb-2">
                 <span className="font-semibold">Ajuste necessário:</span> +{difference.toFixed(2)}€ (+8%)
@@ -100,8 +77,8 @@ export default function PriceCalculator() {
                 Com este pequeno ajuste, o Faturex, TPA e Agenda ficam completamente grátis. Zero custos fixos mensais!
               </p>
             </div>
-          </div>
-        )}
+          )}
+        </div>
 
         {/* Explanation Section */}
         <div className="mt-8 bg-white rounded-xl p-6 shadow-lg border-2 border-purple-200">
