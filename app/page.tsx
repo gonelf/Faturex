@@ -386,27 +386,20 @@ export default function Home() {
               </p>
             </div>
 
-            {/* FAQ 3 - High volume */}
+            {/* FAQ 3 - Simple pricing */}
             <div className="bg-gradient-to-br from-blue-50 to-white p-8 rounded-2xl shadow-lg border-2 border-blue-200">
               <h4 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
-                <span className="text-3xl mr-3">📈</span>
-                E se eu faturar muito?
+                <span className="text-3xl mr-3">📊</span>
+                Qual é a taxa?
               </h4>
-              <p className="text-gray-700 text-lg leading-relaxed">
-                <span className="font-bold text-blue-600">Quanto mais vender, menos paga!</span> A taxa desce progressivamente:
+              <p className="text-gray-700 text-lg leading-relaxed mb-4">
+                <span className="font-bold text-blue-600">Simples e transparente:</span> apenas 8% sobre o que faturar.
               </p>
-              <div className="mt-4 grid md:grid-cols-3 gap-4">
-                <div className="bg-blue-100 rounded-lg p-4 text-center">
-                  <p className="text-sm text-blue-800 mb-1">Até 2.500€/mês</p>
-                  <p className="text-2xl font-bold text-blue-900">8%</p>
-                </div>
-                <div className="bg-blue-200 rounded-lg p-4 text-center">
-                  <p className="text-sm text-blue-800 mb-1">Até 5.000€/mês</p>
-                  <p className="text-2xl font-bold text-blue-900">5%</p>
-                </div>
-                <div className="bg-blue-300 rounded-lg p-4 text-center">
-                  <p className="text-sm text-blue-800 mb-1">Acima de 5.000€/mês</p>
-                  <p className="text-2xl font-bold text-blue-900">4%</p>
+              <div className="flex justify-center">
+                <div className="bg-blue-100 rounded-xl p-8 text-center border-2 border-blue-300">
+                  <p className="text-blue-800 mb-2 font-semibold">Taxa única</p>
+                  <p className="text-5xl font-bold text-blue-900">8%</p>
+                  <p className="text-blue-700 text-sm mt-2">Sem escalões complicados</p>
                 </div>
               </div>
             </div>
