@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Calculator, TrendingUp, TrendingDown } from 'lucide-react'
 
 export default function PriceCalculator() {
-  const [currentPrice, setCurrentPrice] = useState<string>('50')
+  const [currentPrice, setCurrentPrice] = useState<string>('20')
   const [bookingsPerMonth, setBookingsPerMonth] = useState<string>('20')
 
   const calculateNewPrice = () => {
