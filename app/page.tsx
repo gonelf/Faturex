@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import { FileText, DollarSign, UserX, CreditCard, ArrowRight, Calendar, AlertCircle, TrendingDown } from 'lucide-react'
 import Typewriter from '@/components/Typewriter'
-import RiskSimulator from '@/components/RiskSimulator'
 import ContactForm from '@/components/ContactForm'
 import PriceCalculator from '@/components/PriceCalculator'
 
@@ -342,14 +341,6 @@ export default function Home() {
           <PriceCalculator />
         </div>
       </section>
-
-      {/* Risk Simulator Section */}
-      <section className="bg-gray-900 py-20">
-        <div className="container mx-auto px-4">
-          <RiskSimulator />
-        </div>
-      </section>
-
 
       {/* FAQ Rápido Section */}
       <section className="container mx-auto px-4 py-20 bg-gray-50">
