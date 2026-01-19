@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Faturex - Portuguese Billing System',
-  description: 'Professional Portuguese Billing System - SAF-T (PT) 1.04 Compliant',
+  title: 'Faturex - Custo Fixo Zero: Software de Faturação que só paga quando vende',
+  description: 'Acabe com mensalidades fixas de 60€/mês. Sistema completo certificado pela AT, com TPA e Agenda incluídos por apenas 8%. Ativação única de 79€.',
 }
 
 export default function RootLayout({
