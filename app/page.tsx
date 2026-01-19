@@ -332,27 +332,6 @@ export default function Home() {
                 </div>
               </div>
             </div>
-
-            {/* Investimento único */}
-            <div className="bg-blue-500/10 border-2 border-blue-500 rounded-2xl p-8 text-center">
-              <p className="text-2xl text-white mb-4">
-                <span className="text-blue-400 font-bold">Investimento único de 79€</span> e depois apenas uma taxa justa sobre o que vende.
-              </p>
-              <div className="flex justify-center gap-8 mt-6">
-                <div>
-                  <p className="text-gray-400 text-sm">Até 2.500€</p>
-                  <p className="text-white font-bold text-xl">8%</p>
-                </div>
-                <div>
-                  <p className="text-gray-400 text-sm">Até 5.000€</p>
-                  <p className="text-white font-bold text-xl">5%</p>
-                </div>
-                <div>
-                  <p className="text-gray-400 text-sm">Acima 5.000€</p>
-                  <p className="text-white font-bold text-xl">4%</p>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </section>
