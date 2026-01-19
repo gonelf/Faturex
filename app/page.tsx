@@ -78,7 +78,7 @@ export default function Home() {
                 O Dilema das PME
               </h3>
               <p className="text-2xl text-gray-700 font-semibold">
-                Porquê pagar <span className="text-red-600 font-bold">720€/ano</span> em custos fixos quando o seu negócio tem meses de pouco movimento?
+                Porquê pagar <span className="text-red-600 font-bold">720€/ano</span> em custos fixos quando o seu negócio tem meses que nem isso fatura?
               </p>
             </div>
 
