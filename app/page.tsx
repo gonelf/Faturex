@@ -90,10 +90,10 @@ export default function Home() {
                   </div>
                   <div>
                     <h4 className="text-xl font-bold text-gray-900 mb-3">
-                      Subscrições que aumentam anualmente
+                      Software barato que fica caro quando precisa
                     </h4>
                     <p className="text-gray-700">
-                      Começou a pagar 25€/mês pelo software? Daqui a 2 anos já está nos 35€. As empresas tradicionais aumentam preços todos os anos, e você não tem escolha a não ser aceitar.
+                      Começou com um software básico e económico? Assim que precisar de TPA, agenda online ou relatórios avançados, tem que pagar módulos extra, integrações caras ou mudar para um sistema complexo. O que era barato fica rapidamente mais caro que uma solução completa.
                     </p>
                   </div>
                 </div>
