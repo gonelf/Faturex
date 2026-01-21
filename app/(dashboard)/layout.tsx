@@ -23,6 +23,7 @@ const navigation = [
   { name: 'Clientes', href: '/customers', icon: Users },
   { name: 'Produtos', href: '/products', icon: Package },
   { name: 'Séries', href: '/series', icon: Hash },
+  { name: 'Integrações', href: '/settings/integrations/at', icon: Settings },
 ]
 
 export default function DashboardLayout({

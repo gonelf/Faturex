@@ -63,6 +63,7 @@ app.get('/', (req: Request, res: Response) => {
         endpoints: {
             health: '/health',
             invoices: '/api/invoices',
+            at: '/api/at',
             contactLeads: '/api/contact-leads'
         }
     });
@@ -121,8 +122,13 @@ const initializeRoutes = async () => {
         // API Routes
         app.use('/api/invoices', authenticateToken, createInvoiceRoutes(billingService));
 
+        // AT (Autoridade Tributária) Routes
+        const { createATRoutes } = await import('./api/at.routes');
+        app.use('/api/at', authenticateToken, createATRoutes());
+
         routesInitialized = true;
         console.log('✅ Invoice routes initialized successfully');
+        console.log('✅ AT routes initialized successfully');
     } catch (error) {
         console.error('❌ Failed to initialize invoice routes:', error);
 
@@ -185,7 +191,7 @@ const initializeContactLeadsRoutes = async () => {
 
 // Initialize routes on first request (lazy initialization for serverless)
 app.use(async (req: Request, res: Response, next: NextFunction) => {
-    if (!routesInitialized && req.path.startsWith('/api/invoices')) {
+    if (!routesInitialized && (req.path.startsWith('/api/invoices') || req.path.startsWith('/api/at'))) {
         await initializeRoutes();
     }
     if (!contactLeadsRoutesInitialized && req.path.startsWith('/api/contact-leads')) {
