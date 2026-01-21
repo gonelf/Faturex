@@ -5,6 +5,7 @@
 
 import { Router, Request, Response } from 'express';
 import { BillingService } from '../services/billing.service';
+import { submitInvoiceToAT } from '../services/at.service';
 
 export function createInvoiceRoutes(billingService: BillingService): Router {
     const router = Router();
@@ -122,6 +123,63 @@ export function createInvoiceRoutes(billingService: BillingService): Router {
             res.status(400).json({
                 success: false,
                 error: error.message || 'Failed to cancel invoice'
+            });
+        }
+    });
+
+    /**
+     * POST /api/invoices/:id/submit-to-at
+     * Submit finalized invoice to AT (Autoridade Tributária)
+     *
+     * Body:
+     * {
+     *   "tenantId": "uuid"
+     * }
+     *
+     * Requirements:
+     * - Invoice must be finalized (status='F')
+     * - Tenant must have valid AT credentials configured
+     * - Invoice will be sent via SOAP webservice to Portal das Finanças
+     */
+    router.post('/:id/submit-to-at', async (req: Request, res: Response) => {
+        try {
+            const { id } = req.params;
+            const { tenantId } = req.body;
+
+            if (!tenantId) {
+                return res.status(400).json({
+                    success: false,
+                    error: 'tenantId is required'
+                });
+            }
+
+            // Submit invoice to AT
+            const result = await submitInvoiceToAT(id, tenantId);
+
+            if (result.success) {
+                res.status(200).json({
+                    success: true,
+                    data: {
+                        atResponseCode: result.atResponseCode,
+                        atMessage: result.atMessage,
+                        atDocumentId: result.atDocumentId
+                    },
+                    message: 'Fatura enviada para AT com sucesso'
+                });
+            } else {
+                res.status(400).json({
+                    success: false,
+                    error: result.atMessage,
+                    code: result.atResponseCode,
+                    details: result.errorDetails
+                });
+            }
+        } catch (error: any) {
+            console.error('Error submitting invoice to AT:', error);
+
+            res.status(500).json({
+                success: false,
+                error: error.message || 'Failed to submit invoice to AT'
             });
         }
     });

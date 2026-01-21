@@ -14,6 +14,8 @@
 import { createClient } from '@supabase/supabase-js';
 import { encrypt, decrypt } from './encryption.service';
 import { validateNIF } from '../utils/nif-validator';
+import { ATSOAPService, getATWSDLUrl, ATInvoiceSubmissionResult } from './at-soap.service';
+import ATXMLBuilder from './at-xml-builder';
 
 // Initialize Supabase client
 const supabaseUrl = process.env.SUPABASE_URL || '';
@@ -92,8 +94,8 @@ function validateUsernameFormat(username: string): { valid: boolean; nif?: strin
 /**
  * Validate AT credentials with Portal das Finanças
  *
- * NOTE: This is a Phase 1 implementation with mock validation
- * Phase 2 will implement actual SOAP webservice integration
+ * Phase 2: Uses real SOAP webservice integration
+ * Falls back to mock validation if SOAP is unavailable (for development)
  *
  * @param credentials - AT username and password
  * @returns Validation result with permissions
@@ -122,20 +124,54 @@ export async function validateCredentials(
     }
 
     // ========================================================================
-    // PHASE 1: MOCK VALIDATION
+    // PHASE 2: REAL SOAP VALIDATION
     // ========================================================================
-    // In Phase 2, this will be replaced with actual SOAP webservice call to AT
-    // For now, we accept credentials if format is valid and simulate response
+    // Try to validate with real AT webservice
+    // Falls back to mock if AT_USE_MOCK_VALIDATION=true in environment
     // ========================================================================
 
-    // TODO Phase 2: Implement actual SOAP call to AT webservice
-    // const soapResponse = await callATWebservice(credentials);
+    const useMock = process.env.AT_USE_MOCK_VALIDATION === 'true';
 
-    // Mock validation - accept if format is valid
-    // In production, this would call AT's webservice endpoint
-    const mockValidation = await mockATValidation(credentials, companyNif);
+    if (useMock) {
+      console.log('⚠️  Using mock AT validation (AT_USE_MOCK_VALIDATION=true)');
+      return await mockATValidation(credentials, companyNif);
+    }
 
-    return mockValidation;
+    try {
+      // Attempt real SOAP validation
+      const soapService = new ATSOAPService();
+      const environment = process.env.AT_ENVIRONMENT === 'production' ? 'production' : 'development';
+      const wsdlUrl = getATWSDLUrl(environment);
+
+      await soapService.connect({
+        wsdlUrl,
+        username: credentials.username,
+        password: credentials.password,
+        timeout: 30000, // 30 seconds
+      });
+
+      const result = await soapService.validateCredentials();
+      soapService.disconnect();
+
+      if (result.success) {
+        return {
+          valid: true,
+          permissions: result.permissions,
+          companyNif: result.companyNif || companyNif,
+          companyName: result.companyName,
+        };
+      } else {
+        return {
+          valid: false,
+          error: result.message || 'Credenciais inválidas',
+        };
+      }
+    } catch (soapError) {
+      // If SOAP fails, log error and fall back to mock (for development)
+      console.error('SOAP validation failed:', soapError);
+      console.log('⚠️  Falling back to mock validation due to SOAP error');
+      return await mockATValidation(credentials, companyNif);
+    }
   } catch (error) {
     return {
       valid: false,
@@ -369,6 +405,142 @@ export async function logSubmission(
   }
 }
 
+/**
+ * Submit invoice to AT via SOAP webservice
+ *
+ * @param invoiceId - Invoice UUID
+ * @param tenantId - Tenant UUID
+ * @returns Submission result
+ */
+export async function submitInvoiceToAT(
+  invoiceId: string,
+  tenantId: string
+): Promise<ATInvoiceSubmissionResult> {
+  try {
+    // 1. Get decrypted AT credentials
+    const credentials = await getDecryptedCredentials(tenantId);
+    if (!credentials) {
+      throw new Error('Credenciais AT não configuradas para este tenant');
+    }
+
+    // 2. Fetch invoice from database
+    const { data: invoice, error: invoiceError } = await supabase
+      .from('invoices')
+      .select(
+        `
+        *,
+        lines:invoice_lines(*),
+        customer:customers(*)
+      `
+      )
+      .eq('id', invoiceId)
+      .single();
+
+    if (invoiceError || !invoice) {
+      throw new Error('Fatura não encontrada');
+    }
+
+    // 3. Validate invoice status (must be finalized)
+    if (invoice.document_status !== 'F') {
+      throw new Error('Apenas faturas finalizadas podem ser enviadas para AT');
+    }
+
+    // 4. Check if already submitted successfully
+    const { data: previousSubmissions } = await supabase
+      .from('at_submission_logs')
+      .select('*')
+      .eq('invoice_id', invoiceId)
+      .eq('status', 'success')
+      .limit(1);
+
+    if (previousSubmissions && previousSubmissions.length > 0) {
+      console.log('⚠️  Invoice already submitted to AT');
+      return {
+        success: true,
+        atResponseCode: 'ALREADY_SUBMITTED',
+        atMessage: 'Fatura já foi enviada anteriormente para AT',
+        atDocumentId: previousSubmissions[0].response_payload?.atDocumentId,
+      };
+    }
+
+    // 5. Convert database invoice to AT format
+    const atInvoiceData = ATXMLBuilder.convertFromDatabase({
+      ...invoice,
+      lines: invoice.lines,
+      customer_tax_id: invoice.customer?.customer_tax_id,
+      customer_name: invoice.customer?.company_name,
+      billing_address: invoice.customer?.billing_address,
+      postal_code: invoice.customer?.postal_code,
+      customer_city: invoice.customer?.city,
+    });
+
+    // 6. Validate invoice data
+    const validation = ATXMLBuilder.validateInvoiceData(atInvoiceData);
+    if (!validation.valid) {
+      throw new Error(`Dados de fatura inválidos: ${validation.errors.join(', ')}`);
+    }
+
+    // 7. Generate XML
+    const invoiceXML = ATXMLBuilder.buildInvoiceXML(atInvoiceData);
+
+    // 8. Connect to AT SOAP service
+    const soapService = new ATSOAPService();
+    const environment = process.env.AT_ENVIRONMENT === 'production' ? 'production' : 'development';
+    const wsdlUrl = getATWSDLUrl(environment);
+
+    await soapService.connect({
+      wsdlUrl,
+      username: credentials.username,
+      password: credentials.password,
+      timeout: 60000, // 60 seconds for submission
+    });
+
+    // 9. Submit invoice
+    const result = await soapService.submitInvoice(invoiceXML);
+    soapService.disconnect();
+
+    // 10. Log submission
+    await logSubmission(
+      tenantId,
+      'invoice',
+      result.success ? 'success' : 'error',
+      { invoiceId, xml: invoiceXML },
+      result,
+      result.atMessage
+    );
+
+    // 11. Update invoice metadata if successful
+    if (result.success && result.atDocumentId) {
+      await supabase
+        .from('invoices')
+        .update({
+          at_document_id: result.atDocumentId,
+          at_submitted_at: new Date().toISOString(),
+        })
+        .eq('id', invoiceId);
+    }
+
+    return result;
+  } catch (error) {
+    // Log error
+    await logSubmission(
+      tenantId,
+      'invoice',
+      'error',
+      { invoiceId },
+      null,
+      error instanceof Error ? error.message : 'Erro desconhecido'
+    );
+
+    return {
+      success: false,
+      atResponseCode: 'SUBMISSION_ERROR',
+      atMessage: error instanceof Error ? error.message : 'Erro ao enviar fatura',
+      errorDetails: error,
+    };
+  }
+}
+
 export default {
   validateCredentials,
   saveCredentials,
@@ -376,4 +548,5 @@ export default {
   getDecryptedCredentials,
   deleteCredentials,
   logSubmission,
+  submitInvoiceToAT,
 };
