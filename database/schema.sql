@@ -366,6 +366,39 @@ FOR EACH ROW
 EXECUTE FUNCTION prevent_finalized_deletion();
 
 -- ============================================================================
+-- Table: contact_leads
+-- Stores contact form submissions for lead generation
+-- ============================================================================
+CREATE TABLE contact_leads (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    phone VARCHAR(20) NOT NULL,
+    business_type VARCHAR(100),
+    message TEXT,
+    status VARCHAR(20) DEFAULT 'new',  -- new, contacted, qualified, converted, rejected
+    source VARCHAR(50) DEFAULT 'homepage_form',
+    user_agent TEXT,
+    ip_address INET,
+    notes TEXT,
+    contacted_at TIMESTAMPTZ,
+    assigned_to VARCHAR(50),
+
+    -- Email notification tracking
+    notification_sent BOOLEAN DEFAULT FALSE,
+    notification_sent_at TIMESTAMPTZ,
+
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_contact_leads_email ON contact_leads(email);
+CREATE INDEX idx_contact_leads_status ON contact_leads(status);
+CREATE INDEX idx_contact_leads_created ON contact_leads(created_at);
+
+COMMENT ON TABLE contact_leads IS 'Contact form submissions for contract lead generation';
+
+-- ============================================================================
 -- Initial Data: Common Portuguese Tax Rates
 -- ============================================================================
 
